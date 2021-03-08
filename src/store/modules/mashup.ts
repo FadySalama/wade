@@ -39,7 +39,7 @@ export default {
         outputs:    null as Array<TD|Mashup> | null,
         ios:        null as Array<TD|Mashup> | null,
         allInteractions: {
-            propertyReads: [] as MAGE.VueInteractionInterface[], 
+            propertyReads: [] as MAGE.VueInteractionInterface[],
             propertyWrites: [] as MAGE.VueInteractionInterface[],
             propertyObservations: [] as MAGE.VueInteractionInterface[],
             eventSubs: [] as MAGE.VueInteractionInterface[],
@@ -67,15 +67,15 @@ export default {
     },
     getters: {
         /** Getter for mashup code
-         * 
+         *
          * @param state store state
          * @returns {string} mashup code
          */
-        getMashupCode(state:any): string {
+        getMashupCode(state: any): string {
             return (state.currentMashup as Mashup).mashupCode;
         },
         /** Getter for SD
-         * 
+         *
          * @param state store state
          * @returns {string} the SD
          */
@@ -83,15 +83,15 @@ export default {
             return (state.currentMashup as Mashup).systemDescription;
         },
         /** Getter for mashup Children
-         * 
-         * @param state 
+         *
+         * @param state
          * @returns {Array<TD | Mashup>} an array of mashup children
          */
         getMashupChildren(state: any): Array<TD | Mashup> {
             return (state.currentMashup as Mashup).children;
         },
         /** Getter for mashup children encapsulated for `DropdownOptions`
-         * 
+         *
          * @param state store state
          * @returns {WADE.DropdownOptionInterface[]} an array of dropdown options
          */
@@ -104,7 +104,7 @@ export default {
             return result;
         },
         /** Getter for IDs of input TDs
-         * 
+         *
          * @param state store state
          * @returns {string[]} an array containing the IDs
          */
@@ -116,7 +116,7 @@ export default {
             return ids;
         },
         /** Getter for IDs of output TDs
-         * 
+         *
          * @param state store state
          * @returns an array containing the IDs
          */
@@ -128,7 +128,7 @@ export default {
             return ids;
         },
         /** Getter for IDs of input/output TDs
-         * 
+         *
          * @param state store state
          * @returns an array containing the IDs
          */
@@ -140,7 +140,7 @@ export default {
             return ids;
         },
         /** Getter for property-read interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueInteractionInterface[]} array of all added property-read interactions
          */
@@ -148,7 +148,7 @@ export default {
             return state.allInteractions.propertyReads;
         },
         /** Getter for property-write interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueInteractionInterface[]} array of all added property-write interactions
          */
@@ -156,7 +156,7 @@ export default {
             return state.allInteractions.propertyWrites;
         },
         /** Getter for event-subscription interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueInteractionInterface[]} array of all added event-subscription interactions
          */
@@ -164,7 +164,7 @@ export default {
             return state.allInteractions.eventSubs;
         },
         /**  Getter for action-invoke interactions considered as input interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueInteractionInterface[]} array of all input action-invoke interactions interactions
          */
@@ -172,7 +172,7 @@ export default {
             return state.allInteractions.actionReads;
         },
         /**  Getter for action-invoke interactions considered as output interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueInteractionInterface[]} array of all output action-invoke interactions interactions
          */
@@ -180,7 +180,7 @@ export default {
             return state.allInteractions.actionInvokes;
         },
         /** Getter for all annotations of property-read interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueAnnotationInterface[]} array of property-read interaction annotations
          */
@@ -188,7 +188,7 @@ export default {
             return state.allAnnotations.propertyReads;
         },
         /** Getter for all annotations of property-write interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueAnnotationInterface[]} array of property-write interaction annotations
          */
@@ -196,7 +196,7 @@ export default {
             return state.allAnnotations.propertyWrites;
         },
         /** Getter for all annotations of event-subscribe interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueAnnotationInterface[]} array of event-subscribe interaction annotations
          */
@@ -204,7 +204,7 @@ export default {
             return state.allAnnotations.eventSubs;
         },
         /** Getter for all annotations of action-invoke interactions that are considered as input interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueAnnotationInterface[]} array of input action-invoke interaction annotations
          */
@@ -212,7 +212,7 @@ export default {
             return state.allAnnotations.actionReads;
         },
         /** Getter for all annotations of action-invoke interactions that are considered as output interactions
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueAnnotationInterface[]} array of output action-invoke interaction annotations
          */
@@ -220,7 +220,7 @@ export default {
             return state.allAnnotations.actionInvokes;
         },
         /** Getter for all top-level annotations of input TDs
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueAnnotationInterface[]} array of top-level input TDs annotations
          */
@@ -228,7 +228,7 @@ export default {
             return state.allTdAnnotations.inputs;
         },
         /** Getter for all top-level annotations of output TDs
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueAnnotationInterface[]} array of top-level output TDs annotations
          */
@@ -236,7 +236,7 @@ export default {
             return state.allTdAnnotations.outputs;
         },
         /** Getter for all top-level annotations of input/output TDs
-         * 
+         *
          * @param state store state
          * @returns {MAGE.VueAnnotationInterface[]} array of top-level input/output TDs annotations
          */
@@ -244,7 +244,7 @@ export default {
             return state.allTdAnnotations.ios;
         },
         /** Converter of execution time in bigint format
-         * 
+         *
          * @param state store state
          * @returns {number | bigint, string} an object that holds the execution time and its corresponding unit
          */
@@ -369,9 +369,9 @@ export default {
             return {executionTime, stringUnit};
         },
         /** Converter of execution time in number format
-         * 
+         *
          * @param state store state
-         * @returns  
+         * @returns
          */
         getGenerationExecutionTime(state: any) {
             const executionTime: [number, number] = state.result.executionTime;
@@ -446,7 +446,7 @@ export default {
                 }
             }
 
-            //compose multiple seconds together
+            // compose multiple seconds together
             if (multipleOfSeconds > 0) {
                 result = multipleOfSeconds;
                 if (numberOfConversionsS === 0 && numberOfConversionsNs === 2) {
@@ -462,7 +462,7 @@ export default {
 
     actions: {
         /** An action that extracts all inputs from the store state and then starts the generation of mashups
-         * 
+         *
          * @param {{generationForm: MAGE.GenerationFormInterface}} generationPayload an object that contain the generation form
          */
         async generateMashups({commit, state},
@@ -530,7 +530,7 @@ export default {
                     }
                 }
 
-                // add forbidden and must-have top-level annotations to the form 
+                // add forbidden and must-have top-level annotations to the form
                 const forbiddenTdAnnotations: MAGE.VueAnnotationInterface[] = [];
                 const mustHaveTdAnnotations: MAGE.VueAnnotationInterface[] = [];
                 for (const tdType in state.allTdAnnotations) {
@@ -570,7 +570,7 @@ export default {
                 });
         },
         /** An action that generates the System Description out of the results
-         * 
+         *
          * @param {number} mashupNr the index of the mashups in the results array
          */
         async generateSystemDescription({state, commit}, mashupNr: number) {
@@ -626,7 +626,7 @@ export default {
             });
         },
         /** Generate SD code
-         * 
+         *
          */
         async generateMashupCode({getters, commit, state}) {
             const sd = getters.getMashupSd;
@@ -652,7 +652,7 @@ Code
 
         },
         /** an action that adds a TD into either inputs, outputs or io
-         * 
+         *
          * @param {{element: TD|Mashup, io: 'input'|'output'|'io'}} payload an object that contains the TD and a string that identifies where to add the TD
          */
         async addTdToIo({dispatch, commit, state}: any, payload: {element: TD|Mashup, io: 'input'|'output'|'io'}) {
@@ -665,7 +665,7 @@ Code
             }
         },
         /** An action that adds the TD semantic vocabularies to the store
-         * 
+         *
          * @param payload an object containing the TD
          */
         async addTdVocab({state}: any, payload: {element: TD}) {
@@ -687,7 +687,7 @@ Code
                     const uri = vocabObject[vocab] as string;
                     // check if Vocab is already added
                     const index = (state.storedVocabs as MAGE.storedVocabInterface[]).findIndex(v => v.vocabUrl === uri);
-                    // if available, add to number of accurance 
+                    // if available, add to number of accurance
                     if (index !== -1) state.storedVocabs[index].numberOfAccurances++;
                     else {
                         // add vocab
@@ -699,7 +699,7 @@ Code
             }
         },
         /** Remove TD from inputs, outputs or io
-         * 
+         *
          * @param payload an object that contains the TD and a string that identifies from where the TD should be removed
          */
         removeTdFromIo({dispatch, commit, state}: any, payload: {element: number, io: 'input'|'output'|'io'}) {
@@ -713,7 +713,7 @@ Code
     },
     mutations: {
         /** Setter for mashup SD
-         * 
+         *
          * @param state store state
          * @param {string} mashupSd SD in string format
          */
@@ -721,7 +721,7 @@ Code
             (state.currentMashup as Mashup).systemDescription = mashupSd;
         },
         /** Setter for mashup code
-         * 
+         *
          * @param state store state
          * @param code code in string format
          */
@@ -729,7 +729,7 @@ Code
             (state.currentMashup as Mashup).mashupCode = code;
         },
         /** A mutation that resets the store state when a new mashup is opened
-         * 
+         *
          * @param state store state
          * @param {Mashup} mashup the mashup object
          */
@@ -762,7 +762,7 @@ Code
             state.showSd = true;
         },
         /** Setter of the generation from
-         * 
+         *
          * @param state store state
          * @param {MAGE.GenerationFormInterface} generationForm the generation form object
          */
@@ -770,7 +770,7 @@ Code
             state.generationForm = generationForm;
         },
         /** Setter for the generation result
-         * 
+         *
          * @param state store state
          * @param {MAGE.MashupGenerationResult} result the result object
          */
@@ -778,7 +778,7 @@ Code
             state.result = result;
         },
         /** Setter for the result-ready flag
-         * 
+         *
          * @param state store state
          * @param {boolean} ready the value to set
          */
@@ -786,7 +786,7 @@ Code
             state.resultReady = ready;
         },
         /** A mutation that adds TDs to input TDs array in the store
-         * 
+         *
          * @param state store state
          * @param {Array<TD|Mashup>} elements an array containing the elements to be added
          */
@@ -811,7 +811,7 @@ Code
             }
         },
         /** A mutation that adds TDs to output TDs array in the store
-         * 
+         *
          * @param state  store state
          * @param elements an array containing the elements to be added
          */
@@ -836,7 +836,7 @@ Code
             }
         },
         /** A mutation that adds TDs to output TDs array in the store
-         * 
+         *
          * @param state store state
          * @param elements an array containing the elements to be added
          */
@@ -861,14 +861,14 @@ Code
             }
         },
         /** A mutation that categorizes the interactions of a TD
-         * 
+         *
          * @param state store state
          * @param payload an object that contains the TD `element` and a string label `io` to identify if it is an input, output or input/output TD
          */
         categorizeTdInteractions(state: any, payload: {element: TD, io: string}) {
             const parsedTd = JSON.parse(payload.element.content);
             /** a function that fetches the description of an annotation if available
-             * 
+             *
              * @param {string} annotation an annotation
              * @returns {string | null} returns the description of a string if found, else returns `null`
              */
@@ -1195,7 +1195,7 @@ Code
             }
         },
         /** A mutation that adds the top-level annotation of the TD in input, output ot input/output array
-         * 
+         *
          * @param state store state
          * @param payload an object containing the TD `element` and a string label `io` that must be `"input"`, `"output"` or `"io"`
          */
@@ -1206,7 +1206,7 @@ Code
             if (!annotations) return;
             if (typeof annotations === 'string') annotations = [annotations];
             /** a function that generates annotation objects to add to the annotations array
-             * 
+             *
              * @param annotations an array of annotation strings
              * @returns {MAGE.VueAnnotationInterface[]} an array of annotation objects
              */
@@ -1260,7 +1260,7 @@ Code
             state.allTdAnnotations[`${payload.io}s`].push(...getAnnotationObjects(annotations));
         },
         /** Setter for the interaction restriction
-         * 
+         *
          * @param state store states
          * @param payload an object that contains an interaction object `interaction` and a restriction label `restriction` that must be either `"none"` or `"forbidden"` or `"mustHave"`
          */
@@ -1297,7 +1297,7 @@ Code
 
         },
         /** Setter for interaction-level annotation restriction
-         * 
+         *
          * @param state store state
          * @param payload an object that contains an annotation object `annotation` and a restriction label `restriction` that must be either `"none"` or `"forbidden"` or `"mustHave"`
          */
@@ -1327,7 +1327,7 @@ Code
             }
         },
         /** Setter for top-level annotation restriction
-         * 
+         *
          * @param state store state
          * @param payload an object that contains an annotation object `annotation` and a restriction label `restriction` that must be either `"none"` or `"forbidden"` or `"mustHave"`
          */
@@ -1340,7 +1340,7 @@ Code
             if (index !== -1) state.allTdAnnotations[`${annotation.type}s`][index].restriction = restriction;
         },
         /** A mutation that removes a TD from inputs array
-         * 
+         *
          * @param state store state
          * @param {TD|Mashup|number} element either a TD instance or a index of the TD in the array
          */
@@ -1361,7 +1361,7 @@ Code
             }
         },
         /** A mutation that removes a TD from outputs array
-         * 
+         *
          * @param state store state
          * @param {TD|Mashup|number} element either a TD instance or a index of the TD in the array
          */
@@ -1382,7 +1382,7 @@ Code
             }
         },
         /** A mutation that removes a TD from inputs/outputs array
-         * 
+         *
          * @param state store state
          * @param {TD|Mashup|number} element either a TD instance or a index of the TD in the array
          */
@@ -1403,14 +1403,14 @@ Code
             }
         },
         /** A mutation that removes interactions associated with a TD
-         * 
+         *
          * @param state store state
          * @param {TD} element a TD
          */
         removeInteractions(state: any, element: TD) {
             const parsedTd = JSON.parse(element.content);
             /** A function that removes all annotations associated with an interaction
-             * 
+             *
              * @param {MAGE.VueInteractionInterface} interaction the interaction
              * @param {'properties' | 'events' | 'actions'} type the type of the interaction
              * @param {'propertyReads' | 'propertyWrites' | 'eventSubs' | 'actionReads' | 'actionInvokes' | 'propertyObservations'} category the category of the interaction
@@ -1491,7 +1491,7 @@ Code
             }
         },
         /** A mutation that removes the vocabularies associated with a TD
-         * 
+         *
          * @param state store state
          * @param payload an object containing a TD instance `element`
          */
@@ -1510,7 +1510,7 @@ Code
             }
         },
         /** A mutation that removes top-level TD annotations
-         * 
+         *
          * @param state store state
          * @param payload an object that contains the index of the TD `element` in the array and the a string label identifying which array it is in. `io`  must be either `"input"`, `"output"` or `"io"`
          */
@@ -1528,7 +1528,7 @@ Code
             }
         },
         /** A mutation that toggles a tab
-         * 
+         *
          * @param state store state
          * @param {string} tabId the id of the tab
          */
@@ -1542,14 +1542,14 @@ Code
             }
         },
         /** A mutation that toggles result-ready flag
-         * 
+         *
          * @param state store state
          */
         toggleResultReady(state) {
             state.resultReady = !state.resultReady;
         },
         /** A mutation that sets a tab to active
-         * 
+         *
          * @param state store state
          * @param {string} tabId the tab id
          */
@@ -1564,7 +1564,7 @@ Code
             }
         },
         /** A mutation that sets a tab to inactive
-         * 
+         *
          * @param state store state
          * @param {string} tabId the tab id
          */

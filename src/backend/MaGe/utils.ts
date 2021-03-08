@@ -10,18 +10,18 @@
  */
 const f = (a, b) => [].concat(...a.map(d => b.map(e => [].concat(d, e))));
 /** A function that calculates the cartesian of arrays using the above-mentioned coding magic :D
- * 
+ *
  * @param a an array
  * @param b an array
  * @param c an array of array
- * @returns the cartesian product 
+ * @returns the cartesian product
  */
 const cartesian = (a?, b?, ...c) => (b ? cartesian(f(a, b), ...c) : a);
 
 /** Calculates mashups using the cartesian product and removes duplicate mashups
- * 
+ *
  * @param {MAGE.InteractionInterface} params a 3-dimensional array of interactions
- * @returns {MAGE.InteractionInterface[][]} a 2-dimensional array with cartesian product 
+ * @returns {MAGE.InteractionInterface[][]} a 2-dimensional array with cartesian product
  */
 const noDuplicatesCartesian = (...params: MAGE.InteractionInterface[][][]): MAGE.InteractionInterface[][] => {
     const product = cartesian(...params);
@@ -55,7 +55,7 @@ const noDuplicatesCartesian = (...params: MAGE.InteractionInterface[][][]): MAGE
 };
 
 /** Calculates the factorial of `num`
- * 
+ *
  * @param {number} num the factorial number
  * @returns {number} the factorial of `num`
  */

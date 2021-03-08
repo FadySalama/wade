@@ -9,7 +9,7 @@ export let vocabStore = new N3.Store();
 
 
 /** A function that fetches a semantic vocabulary and stores it in an N3 graph
- * 
+ *
  * @param {string} url the url of the vocabulary
  * @returns {Promise<boolean>}
  */

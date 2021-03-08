@@ -125,7 +125,7 @@ export async function consumeAndParseTd(
 export async function fetchTD(uri: string) {
   if (!tdConsumer) {
     tdConsumer = new TdConsumer('', null, ['']);
-  } 
+  }
   return tdConsumer.fetchTD(uri);
 }
 

@@ -123,7 +123,7 @@ async function generateInteractionCombinations(generationForm: MAGE.GenerationFo
 }
 
 /** Parses a TD to return all interactions that can serve as an input
- * 
+ *
  * @param  thingDescription a parsed JSON object representing the TD
  * @param {MAGE.FiltersInterface} filters an object containing the filters and constraints which were defined in the generation form
  * @returns {{ events: MAGE.InputInteractionInterface[], properties: MAGE.InputInteractionInterface[], actions: MAGE.InputInteractionInterface[], observations: MAGE.InputInteractionInterface[] }} an object containing four arrays of all input interaction found in the TD that conform to the specified constraints
@@ -282,7 +282,7 @@ function getInputInteractions(thingDescription: any, filters: MAGE.FiltersInterf
 }
 
 /** Parse a TD to return all interactions that can serve as an output
- * 
+ *
  * @param thingDescription a parsed JSON object representing the TD
  * @param {MAGE.FiltersInterface} filters an object containing the filters and constraints which were defined in the generation form
  * @returns {{ actions: MAGE.InteractionInterface[], properties: MAGE.InteractionInterface[] }} an object containing two arrays of all output interaction found in the TD that conform to the specified constraints
@@ -377,10 +377,10 @@ function getOutputInteractions(thingDescription: any, filters: MAGE.FiltersInter
 }
 
 /** Filter a list of output affordances to match a given input affordance.
- * 
+ *
  * @param {MAGE.InputInteractionInterface} input the input affordance
  * @param {MAGE.InteractionInterface[]} outputs an array containing all output affordances
- * @param {MAGE.FiltersInterface} filters an object containing filters and constraints 
+ * @param {MAGE.FiltersInterface} filters an object containing filters and constraints
  * @returns {Promise<MAGE.InteractionInterface[]>} an array containing the filtered output affordances
  */
 async function getMatchingOutputs(
@@ -415,7 +415,7 @@ async function getMatchingOutputs(
     return outputs;
 }
 /** For a list of inputs, return all possible input/output combinations
- * 
+ *
  * @param {MAGE.InputInteractionInterface[]} inputs an array containing all inputs
  * @param {MAGE.GenerationFormInterface} form an object representing the generation form
  * @returns {MAGE.InteractionInterface[][]} a 2-dimensional array containing the input-output combinations
@@ -474,7 +474,7 @@ function getFinalCombinations(inputs: MAGE.InputInteractionInterface[], form: MA
 }
 
 /** Check if a mashup includes a specific interaction or not
- * 
+ *
  * @param {MAGE.InteractionInterface[]} mashup an array of the mashup's interactions
  * @param {MAGE.VueInteractionInterface[]} mustHaveInteractions an array of the interactions that must be included in the mashup
  * @returns {boolean} returns `true` if the mashup contains all interactions in `mustHaveInteractions`, otherwise returns `false`
@@ -492,7 +492,7 @@ function mashupIncludesInteractions(mashup: MAGE.InteractionInterface[], mustHav
 }
 
 /** Checks if a mashup includes at least one interaction from TDs annotated with top-level annotations
- * 
+ *
  * @param {MAGE.InteractionInterface[]} mashup an array containing the interactions of the mashup
  * @param {MAGE.VueAnnotationInterface[]} mustHaveTdAnnotations an array containing the must-have top-level annotations
  * @param {MAGE.GenerationFormInterface} form the generation form
@@ -539,9 +539,9 @@ function mashupIncludesTdAnnotations(
 }
 
 /** Checks if a mashup includes interactions that are annotated with a set of specified annotations
- * 
+ *
  * @param {MAGE.InteractionInterface[]} mashup an array containing the interactions of the mashup
- * @param {MAGE.VueAnnotationInterface[]} mustHaveAnnotations an array containing the must-have interaction-annotation 
+ * @param {MAGE.VueAnnotationInterface[]} mustHaveAnnotations an array containing the must-have interaction-annotation
  * @returns {boolean} returns `true` if there is at least one interaction for each annotation in `mustHaveAnnotations`, otherwise returns `false`
  */
 function mashupIncludesAnnotations(mashup: MAGE.InteractionInterface[],
@@ -562,7 +562,7 @@ function mashupIncludesAnnotations(mashup: MAGE.InteractionInterface[],
 }
 
 /** Checks if a mashup uses mixed input templates (uses different types of input interactions)
- * 
+ *
  * @param {MAGE.InputInteractionInterface[]} inputs array of input interactions
  * @returns {boolean} returns `true` if mashup uses mixed input templates, else returns `false`
  */
@@ -577,7 +577,7 @@ function isMixedInputTemplate(inputs: MAGE.InputInteractionInterface[]): boolean
 }
 
 /** Returns the number of Things that participate in a given list on interactions
- * 
+ *
  * @param {MAGE.InteractionInterface[]} interactions an array containing the interactions
  * @returns {number} the number of Things participating in `interactions`
  */
@@ -727,7 +727,7 @@ function generatePlantUmlSeqDiagram(mashupObject: {mashupName: string, interacti
 }
 
 /** Calculates size of design space, i.e. how many mashups would be possible without any rules or filters
- * 
+ *
  * @param {MAGE.GenerationFormInterface} generationForm an object representation of the generation form
  * @returns {number} the maximum number of mashups that can be generated
  */
@@ -783,7 +783,7 @@ function getDesignSpaceSize(generationForm: MAGE.GenerationFormInterface): numbe
 }
 
 /** A function that generates mashups based on TDs, filters, and constraints specified in the generation form
- * 
+ *
  * @param {MAGE.GenerationFormInterface} generationForm an object representation of the generation form
  * @returns {Promise<MAGE.MashupGenerationResult>} a Promise containing the results of the mashup generation encapsulated in an object. `designSpaceSize` contains the maximum number of mashups that can be generated. `mashupsGenerated` is the number of generated mashups. `imagesMD` is an array containing the strings used for mermaid.js. `plantUmls` is an array containing PlantUML textual code. `mashups` is a 2-dimensional array containing all generated mashups as arrays of interactions.
  */
@@ -838,8 +838,8 @@ export default async function generateMashups(generationForm: MAGE.GenerationFor
     return results;
 }
 
-/** A class of the GenerationForm 
- * 
+/** A class of the GenerationForm
+ *
  */
 export class GenerationForm implements MAGE.GenerationFormInterface {
     public mashupName: string;

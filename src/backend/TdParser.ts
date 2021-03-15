@@ -547,6 +547,7 @@ class parsedProperty extends parsedInteraction implements WADE.TdPropertyInterac
         timeMs: undefined,
         payloadSize: undefined
     }
+    let timeStart;
     // disregard if protocol is mqtt
     if(protocol === ProtocolEnum.MQTT) {
       result.errorMsg = "Cannot read property in MQTT";
@@ -570,7 +571,6 @@ class parsedProperty extends parsedInteraction implements WADE.TdPropertyInterac
     for(let [formIndex, form] of this.forms.entries()) {
       let hrefProtocol = form.href.split(':')[0];
       let operations: string[];
-      let timeStart;
       // add protocol in available protocols
       if(!this.base && !this.availableProtocols.includes(hrefProtocol)) this.availableProtocols.push(hrefProtocol); 
       // if form op is undefined, treat as readproperty and writeproperty according to standard
@@ -613,15 +613,14 @@ class parsedProperty extends parsedInteraction implements WADE.TdPropertyInterac
    * @returns 
    */
   public async writeProperty(protocol: ProtocolEnum, value: any, uriVariables?: object) {
-    let result: { interactionSuccessful: boolean, resultBody: any, errorMsg?: string,
-      timeS: number | undefined, timeMs: number | undefined, payloadSize: any} = {
+    let result: { interactionSuccessful: boolean, errorMsg?: string,
+      timeS: number | undefined, timeMs: number | undefined} = {
         interactionSuccessful: false,
-        resultBody: undefined,
         errorMsg: undefined,
         timeS: undefined,
         timeMs: undefined,
-        payloadSize: undefined
     }
+    let timeStart;
 
     if(protocol === ProtocolEnum.MQTT) {
       result.errorMsg = "Cannot write property in MQTT";
@@ -652,7 +651,11 @@ class parsedProperty extends parsedInteraction implements WADE.TdPropertyInterac
         let interactionOptions = {formIndex: formIndex};
         if(this.uriVariables && uriVariables) interactionOptions["uriVariables"] = uriVariables;
         try {
+          timeStart = process.hrtime();
           await this.consumedThing.writeProperty(this.title, value, interactionOptions);
+          let timeEnd = process.hrtime(timeStart);
+          result.timeS = timeEnd[0];
+          result.timeMs = timeEnd[1]/1000000;
           result.interactionSuccessful = true;
           return result;
         } catch (err) {
@@ -668,9 +671,8 @@ class parsedProperty extends parsedInteraction implements WADE.TdPropertyInterac
   }
 
   public async observeProperty(protocol: ProtocolEnum, listener: WoT.WotListener, uriVariables?: object) {
-    let result: {interactionSuccessful: boolean, resultBody: any, errorMsg?: string} = {
+    let result: {interactionSuccessful: boolean, errorMsg?: string} = {
       interactionSuccessful: false,
-      resultBody: undefined,
       errorMsg: undefined
     }
 
@@ -724,9 +726,8 @@ class parsedProperty extends parsedInteraction implements WADE.TdPropertyInterac
   }
 
   public async unobserveProperty(protocol: ProtocolEnum, uriVariables?: object) {
-    let result: {interactionSuccessful: boolean, resultBody: any, errorMsg?: string} = {
+    let result: {interactionSuccessful: boolean, errorMsg?: string} = {
       interactionSuccessful: false,
-      resultBody: undefined,
       errorMsg: undefined
     }
 
@@ -797,11 +798,16 @@ class parsedAction extends parsedInteraction implements WADE.TdActionInteraction
   }
 
   public async invokeAction(protocol: ProtocolEnum, params?: any, uriVariables?: object) {
-    let result: {interactionSuccessful: boolean, resultBody: any, errorMsg?: string} = {
+    let result: {interactionSuccessful: boolean, resultBody: any, errorMsg?: string
+    timeS: number | undefined, timeMs: number | undefined, payloadSize: string | undefined} = {
       interactionSuccessful: false,
       resultBody: undefined,
+      timeS: undefined,
+      timeMs: undefined,
+      payloadSize: undefined,
       errorMsg: undefined
     }
+    let timeStart: [number, number] | undefined;
     // disregard if protocol is mqtt
     if(protocol === ProtocolEnum.MQTT) {
       result.errorMsg = "Cannot invoke action using MQTT";
@@ -828,10 +834,18 @@ class parsedAction extends parsedInteraction implements WADE.TdActionInteraction
         // add uriVariables if available and needed
         if(this.uriVariables && uriVariables) interactionOptions['uriVariables'] = uriVariables;
         try {
+          timeStart = process.hrtime();
           result.resultBody = await this.consumedThing.invokeAction(this.title, params, interactionOptions);
+          let timeEnd = process.hrtime(timeStart);
+          result.timeS = timeEnd[0];
+          result.timeMs = timeEnd[1]/1000000;
+          if (result.resultBody !== undefined && result.resultBody !== null) result.payloadSize = this.sizeCalculator.getSize(result.resultBody);
           result.interactionSuccessful = true;
           return result;
         } catch (err) {
+          let timeEnd = process.hrtime(timeStart);
+          result.timeS = timeEnd[0];
+          result.timeMs = timeEnd[1]/1000000;
           result.errorMsg = err;
           result.interactionSuccessful = false;
           return result;
@@ -859,12 +873,10 @@ class parsedEvent extends parsedInteraction implements WADE.TdEventInteractionIn
   }
 
   public async subscribeEvent(protocol: ProtocolEnum, listener: WoT.WotListener, uriVariables?: object) {
-    let result: {interactionSuccessful: boolean, resultBody: any, errorMsg?: string} = {
+    let result: {interactionSuccessful: boolean, errorMsg?: string} = {
       interactionSuccessful: false,
-      resultBody: undefined,
       errorMsg: undefined
     }
-
     if(this.base) {
       let baseProtocol = this.base.split(':')[0]
       if(baseProtocol !== protocol) {
@@ -900,12 +912,10 @@ class parsedEvent extends parsedInteraction implements WADE.TdEventInteractionIn
   }
 
   public async unsubscribeEvent(protocol: ProtocolEnum, uriVariables?: object) {
-    let result: {interactionSuccessful: boolean, resultBody: any, errorMsg?: string} = {
+    let result: {interactionSuccessful: boolean, errorMsg?: string} = {
       interactionSuccessful: false,
-      resultBody: undefined,
       errorMsg: undefined
     }
-
     if(this.base) {
       let baseProtocol = this.base.split(':')[0]
       if(baseProtocol !== protocol) {

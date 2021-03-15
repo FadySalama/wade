@@ -33,7 +33,7 @@
       <aStatusbar class="td-page-statusbar" :statusMessage="statusMessage" />
       <!-- TODO no property statusMessage exists on aStatusbar! can be removed? -->
       <div class="td-main">
-        <div class="td-main-left border-right">
+        <div class="td-editor-area">
           <mUrlBar
             v-if="showUrlBar"
             class="url-bar"
@@ -46,12 +46,15 @@
             <oEditor v-on:hide-url-bar="hideUrlBar" v-on:open-config="tabClicked('config')" />
           </div>
         </div>
-        <div class="td-main-middle border-right">
-          <oSelection />
+        <div class="td-testing-area">
+          <div class="td-main-middle border-right">
+            <oSelection />
+          </div>
+          <div class="td-main-right">
+            <oResults />
+          </div>
         </div>
-        <div class="td-main-right">
-          <oResults />
-        </div>
+        
       </div>
     </div>
   </div>
@@ -72,7 +75,6 @@ import oResults from '@/components/03_organisms/oResults.vue';
 import oProtocolSelection from '@/components/03_organisms/oProtocolSelection.vue';
 import tPerformance from '@/components/04_templates/tPerformance.vue';
 import { TdStateEnum, TDTabsEnum } from '../../util/enums';
-import * as Api from '@/backend/Api';
 
 export default Vue.extend({
   name: 'tThingDescription',
@@ -119,7 +121,7 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations('TdStore', ['setActiveTab']),
-    ...mapActions('TdStore',['fetchTD']),
+    ...mapActions('TdStore', ['fetchTD']),
     hideUrlBar() {
       if (this.showUrlBar) this.showUrlBar = false;
     },
@@ -128,10 +130,6 @@ export default Vue.extend({
         this.showUrlBar = true;
       }
       if (typeof args === 'string') this.currentTabId = args;
-      // this.$router.push({
-      //   name: 'config',
-      //   params: { type: 'td', id: this.id, tab: 'config' }
-      // });
     },
     changeActiveTab(): void {
       (this as any).setActiveTab({
@@ -141,8 +139,8 @@ export default Vue.extend({
     },
     async fetchFunction(url: string) {
         (this as any).fetchTD({uri: url}).then((fetchedTd) => {
-          if(fetchedTd) (this as any).$eventHub.$emit('fetched-td', fetchedTd);
-        })
+          if (fetchedTd) (this as any).$eventHub.$emit('fetched-td', fetchedTd);
+        });
       }
   },
   watch: {
@@ -188,30 +186,39 @@ export default Vue.extend({
 }
 
 .td-main {
-  display: flex;
   height: 93%;
+  overflow: scroll;
+}
+
+.td-main::-webkit-scrollbar {
+    display: inline;
+}
+
+.td-main::-webkit-scrollbar-track {
+    background-color: #939C9E;
+    border-radius: 5pt;
+}
+
+.td-main::-webkit-scrollbar-thumb {
+    background-color: #b5dfdd;
+    border-radius: 5pt;
+}
+
+.td-editor-area {
+  height: 100%;
+  width: 99%;
+}
+
+.td-testing-area {
+  height: 100%;
+  width: 100%;
+  display: flex;
 }
 
 .td-performance {
   height: 93%;
   width: 100%;
   display: flex;
-}
-
-.td-main-left {
-  width: 33%;
-  padding: 0px 7px 7px 7px;
-  height: 100%;
-}
-
-.td-main-middle {
-  width: 33%;
-  padding: 0px 7px 7px 7px;
-}
-
-.td-main-right {
-  width: 33%;
-  padding: 0px 7px 7px 7px;
 }
 
 .url-bar {

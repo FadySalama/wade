@@ -92,10 +92,10 @@ export default {
          * @param payload an object that includes the property uri, which is a the string of the URI for the TD resource
          */
         async fetchTD({ commit, state }, payload: {uri: string}) {
-                commit('setTdState', TdStateEnum.TD_FETCHING);
-                commit('setErrorMsg', null);
-                commit('setInteractionState', null);
-                commit('setStatusMessage');
+            commit('setTdState', TdStateEnum.TD_FETCHING);
+            commit('setErrorMsg', null);
+            commit('setInteractionState', null);
+            commit('setStatusMessage');
             return Api.fetchTD(payload.uri).then(myJson => {
                 const td = JSON.stringify(myJson);
                 const tdState = TdStateEnum.VALID_TD_FETCHED;
@@ -111,15 +111,14 @@ export default {
                 commit('setInteractionState', null);
                 commit('setStatusMessage');
                 return fetchedTd;
-              })
-              .catch( (err) => {
-                    const tdState = TdStateEnum.INVALID_TD_FETCHED;
-                    commit('setTdState', tdState);
-                    commit('setErrorMsg', err);
-                    commit('setInteractionState', null);
-                    commit('setStatusMessage');
-                }
-              );
+            })
+            .catch( (err) => {
+                const tdState = TdStateEnum.INVALID_TD_FETCHED;
+                commit('setTdState', tdState);
+                commit('setErrorMsg', err);
+                commit('setInteractionState', null);
+                commit('setStatusMessage');
+            });
         },
         async processChangedTd({ commit, state }, payload: any) {
             // Do not consume td when its empty or not in correct format
@@ -136,14 +135,14 @@ export default {
             commit('setResults', []);
             commit('setTdEditor', payload.td);
 
-            const parsedTd = await Api.consumeAndParseTd(payload.td, payload.config, payload.protocols);
+            const parsedTdPayload = await Api.consumeAndParseTd(payload.td, payload.config, payload.protocols);
             let interactionState: InteractionStateEnum | null = null;
             // Store new parsed td
             if (
-                parsedTd.tdState === TdStateEnum.VALID_TD
-                || parsedTd.tdState === TdStateEnum.VALID_CONSUMED_TD
+                parsedTdPayload.tdState === TdStateEnum.VALID_TD
+                || parsedTdPayload.tdState === TdStateEnum.VALID_CONSUMED_TD
             ) {
-                commit('setTdParsed', parsedTd.tdParsed);
+                commit('setTdParsed', parsedTdPayload.parsedTd);
                 const hasInteractions = state.tdParsed.propertyInteractions.length > 0
                     || state.tdParsed.actionInteractions.length > 0
                     || state.tdParsed.eventInteractions.length > 0;
@@ -153,14 +152,14 @@ export default {
             }
 
             // Set td status and error message
-            commit('setTdState', parsedTd.tdState);
-            commit('setErrorMsg', parsedTd.errorMsg);
+            commit('setTdState', parsedTdPayload.tdState);
+            commit('setErrorMsg', parsedTdPayload.errorMsg);
             commit('setInteractionState', interactionState);
             commit('setStatusMessage');
         },
         // Scan Td for different forms
-        async setProtocols({ commit }, payload: any) {
-            const protocols = await Api.retrieveProtocols(payload.td);
+        setProtocols({ commit }, payload: any) {
+            const protocols = Api.retrieveProtocols(payload.td);
             commit('setProtocols', protocols);
         },
         async resetAll({ commit }) {
@@ -182,25 +181,25 @@ export default {
         },
 
         // Add new interaction or change interaction input (without changing the order of selected interactions).
-        async addToSelectedInteractions({ commit, state }, payload) {
+        async addToSelectedInteractions({ commit, state }: any, payload: { changeInteraction: any; newInteraction: any; }) {
             if (!payload.changeInteraction && !payload.newInteraction) return;
 
-            const selectedInteractions = await state.selections;
+            const selectedInteractions = state.selections;
 
-            const interaction = await payload.changeInteraction
+            const interaction = payload.changeInteraction
                 ? payload.changeInteraction
                 : payload.newInteraction ? payload.newInteraction : null;
-            const index = await selectedInteractions.indexOf(interaction);
-            const isNew = await payload.newInteraction ? true : false;
+            const index = selectedInteractions.indexOf(interaction);
+            const isNew = payload.newInteraction ? true : false;
 
             if (isNew) {
                 // Remove interaction if it already exists
-                if (index !== -1) await selectedInteractions.splice(index, 1);
+                if (index !== -1) selectedInteractions.splice(index, 1);
                 // Add to selected interactions
                 selectedInteractions.push(interaction);
             } else {
                 // Replace selected interaction when input changed
-                selectedInteractions[index] = await interaction;
+                selectedInteractions[index] = interaction;
             }
             commit('setSelections', selectedInteractions);
             commit('setStatusMessage');
@@ -230,7 +229,7 @@ export default {
             // Correct format of selected interactions for timing measurements
             const interactions: Array<{ name: string, type: string, input: any, interaction: any}> = [];
 
-            // Add all timing meaurement relevant data of selected interactions
+            // Add all timing measurement relevant data of selected interactions
             (state.selections).forEach(selection => {
                 interactions.push({
                     name: selection.interactionName,

@@ -119,7 +119,7 @@ export default Vue.extend({
            'getTdState',
            'isValidTd']),
         isBtnActive() {
-            return (this as any).getInteractionState ===         InteractionStateEnum.NOT_INVOKED
+            return (this as any).getInteractionState === InteractionStateEnum.NOT_INVOKED
             || (this as any).getInteractionState === InteractionStateEnum.INVOKED;
         }
     },
@@ -132,11 +132,11 @@ export default Vue.extend({
                 'resetSelections']),
         // Add clicked interaction to selected interactions.
         // element: { interactionName, interactionSelectBtn, interactionType }
-        async select(element, input?, changeInput?: boolean) {
-            if (input !== null || input !== undefined)element.interactionSelectBtn.input = input;
+        select(element, input?, changeInput?: boolean) {
+            if (input !== null || input !== undefined) element.interactionSelectBtn.input = input;
 
             // Either just change input or add new interaction
-            await (this as any).addToSelectedInteractions(
+            (this as any).addToSelectedInteractions(
                 changeInput
                 ? { changeInteraction: element}
                 : { newInteraction: element});
@@ -144,7 +144,7 @@ export default Vue.extend({
         // Remove clicked interaction of selected interactions.
         // element: { interactionName, interactionSelectBtn, interactionType }
         async reset(element) {
-            await (this as any).removeFromSelectedInteractions({ interactionToRemove: element});
+            await (this as any).removeFromSelectedInteractions({interactionToRemove: element});
         },
         // Remove all interactions from selected interacitons.
         resetAll() {

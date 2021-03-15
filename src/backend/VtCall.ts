@@ -1,13 +1,10 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import * as WoT from 'wot-typescript-definitions';
 import * as os from 'os';
 import * as child_process from 'child_process';
 import * as stream from 'stream';
 import { VtStatus, ProtocolEnum } from '@/util/enums';
 import { loggingError, isDevelopment } from '@/util/helpers';
-// import { readFile , readFileSync } from "fs";
-// import { join } from "path";
 
 export default class VtCall {
     public link: string;
@@ -65,12 +62,12 @@ export default class VtCall {
             })
             .then( () => {
                 this.status = VtStatus.RUNNING;
-                res();
+                res(null);
             }, (err) => {
                 loggingError(new Error('creating a link for Vt in launch Vt was not possible: ' + err));
                 /* Virtual Thing should be started even if Link generation failed*/
                 this.status = VtStatus.RUNNING;
-                res();
+                res(null);
             });
         });
     }
@@ -95,14 +92,14 @@ export default class VtCall {
                     fs.rmdir(this.usedTempFolder, (err) => {
                         if (err) {
                             loggingError('unable to delete tmp dir: ' + err);
-                            res();
+                            res(null);
                         } else {
-                            res();
+                            res(null);
                         }
                     });
                 } else {
                     loggingError('no tmp folder was found');
-                    res();
+                    res(null);
                 }
             } else {
                 rej(new Error('Vt Process does not exist -> cannot exit'));
@@ -124,7 +121,7 @@ export default class VtCall {
                 } else {
                     this.usedTempFolder = genfolder;
                     clearTimeout(createTempTimeout);
-                    res();
+                    res(null);
                 }
             });
         });
@@ -138,7 +135,7 @@ export default class VtCall {
                     } catch (err) {
                         rej(new Error('Cannot write given Td: ' + err));
                     }
-                    res();
+                    res(null);
                 } else {
                     rej(new Error('used temp folder is === null'));
                 }
@@ -155,7 +152,7 @@ export default class VtCall {
                 } catch (err) {
                     rej(new Error('cannot write Vt config: ' + err));
                 }
-                res();
+                res(null);
             } else {
                 rej(new Error('used temp folder is === null'));
             }
@@ -225,7 +222,7 @@ export default class VtCall {
                     }
                 });
 
-                res();
+                res(null);
             });
     }
 

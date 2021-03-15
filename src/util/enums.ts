@@ -19,6 +19,23 @@ export enum ElementTitleEnum {
   MASHUP = 'Mashup'
 }
 
+export enum InteractionAffordancesTypes {
+  PROP = 'property',
+  ACTION = 'action',
+  EVENT = 'event',
+}
+
+export enum DataSchemaTypes {
+  ARRAY = 'array',
+  BOOL = 'boolean',
+  INT = 'integer',
+  NUM = 'number',
+  OBJ = 'object',
+  STRING = 'string',
+  NULL = 'null',
+  UNDEF = 'undefined'
+}
+
 export enum PossibleInteractionTypesEnum {
   PROP_READ = 'property-read',
   PROP_WRITE = 'property-write',
@@ -67,7 +84,7 @@ export enum TdConfigEnum {
 
 /* The enum values indexes of SAVE_SUCCESS and ERROR must be equal
  to the indexes at the TdConfigEnum, to ensure that aConfigStatusBar
- highliting works */
+ highlighting works */
 export enum TdVirtualConfigEnum {
   INFO = 'This config will be used to generate a Virtual Thing for your TD',
   UNSAVED = 'Please save your changes to apply them',

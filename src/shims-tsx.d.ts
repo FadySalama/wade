@@ -1,4 +1,5 @@
 import Vue, { VNode } from 'vue';
+import { DataSchema } from 'wot-typescript-definitions';
 import { VtStatus } from './util/enums';
 
 
@@ -63,6 +64,12 @@ declare global {
       MASHUP = 'mashup'
     }
 
+    enum InteractionAffordancesTypes {
+      PROP = 'property',
+      ACTION = 'action',
+      EVENT = 'event',
+    }
+
     enum PossibleInteractionTypesEnum {
       PROP_READ = 'property-read',
       PROP_WRITE = 'property-write',
@@ -71,6 +78,17 @@ declare global {
       ACTION = 'action-invoke',
       EVENT_SUB = 'event-subscribe',
       EVENT_UNSUB = 'event-unsubscribe'
+    }
+
+    enum DataSchemaTypes {
+      ARRAY = 'array',
+      BOOL = 'boolean',
+      INT = 'integer',
+      NUM = 'number',
+      OBJ = 'object',
+      STRING = 'string',
+      NULL = 'null',
+      UNDEF = 'undefined'
     }
 
 // =============================================================================
@@ -132,6 +150,80 @@ declare global {
   }
 
   // ===========================================================================
+    interface TdDataSchemaInterface {
+      type: DataSchemaTypes
+      enum?: any[]
+      readOnly: boolean
+      writeOnly: boolean
+      [key: string]: any
+    }
+    interface TdArraySchemaInterface extends TdDataSchemaInterface {
+      type: DataSchemaTypes.ARRAY
+      items?: TdDataSchemaInterface | TdDataSchemaInterface[];
+      minItems?: number
+      maxItems?: number
+    }
+
+    interface TdBooleanSchemaInterface extends TdDataSchemaInterface {
+      type: DataSchemaTypes.BOOL
+    }
+
+    interface TdNumberSchemaInterface extends TdDataSchemaInterface {
+      type: DataSchemaTypes.NUM
+      minimum?: number
+      maximum?: number
+    }
+
+    interface TdIntegerSchemaInterface extends TdDataSchemaInterface {
+      type: DataSchemaTypes.INT
+      minimum?: number
+      maximum?: number
+    }
+
+    interface TdObjectSchemaInterface extends TdDataSchemaInterface {
+      type: DataSchemaTypes.OBJ
+      properties?: {[key: string]: TdDataSchemaInterface}
+      required?: string[]
+    }
+
+    interface TdStringSchemaInterface extends TdDataSchemaInterface {
+      type: DataSchemaTypes.STRING
+    }
+
+    interface TdNullSchemaInterface extends TdDataSchemaInterface {
+      type: DataSchemaTypes.NULL
+    }
+    interface TdFormInterface {
+      op: string | string[];
+      href: string;
+      [key: string]: any;
+    }
+    interface TdInteractionInterface {
+      title: string;
+      description?: string;
+      interactionType: InteractionAffordancesTypes
+      forms: TdFormInterface[];
+      uriVariables?: {[key: string]: TdDataSchemaInterface};
+      base?: string,
+    }
+
+    interface TdPropertyInteractionInterface extends TdInteractionInterface, TdDataSchemaInterface {
+      observable?: boolean
+    }
+
+    interface TdActionInteractionInterface extends TdInteractionInterface {
+      input?: TdDataSchemaInterface;
+      output?: TdDataSchemaInterface;
+      safe: boolean;
+      idempotent: boolean;
+    }
+
+    interface TdEventInteractionInterface extends TdInteractionInterface {
+      subscription?: TdDataSchemaInterface;
+      data?: TdDataSchemaInterface
+      cancellation?: TdDataSchemaInterface;
+    }
+
     interface MqttConfigInterface {
       broker: string;
       username: string | undefined;

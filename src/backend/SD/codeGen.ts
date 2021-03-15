@@ -664,7 +664,7 @@ function generateIndexJS(SD: SDSQ.sdTemplate) { // , fileName: string) {
     out.push(addS);
     out.push(addC);
     out.push(`servient.start().then( WoT => {
-    wotMashup = new WotMashup(WoT, TD_DIRECTORY) // you can change the wotDevice (wotMashup) to something that makes more sense
+    const wotMashup = new WotMashup(WoT, TD_DIRECTORY) // you can change the wotDevice (wotMashup) to something that makes more sense
 })`);
 
     return out.join('\n\n');

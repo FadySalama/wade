@@ -15,7 +15,7 @@ export default class TdConsumer {
     private config: any;
     private protocols: string[];
     private tdJson: JSON | null;
-    private tdConsumed: WoT.ConsumedThing | null;
+    private consumedTd: WoT.ConsumedThing | null;
     private tdState: TdStateEnum | null;
     private errorMsg: string | null;
 
@@ -27,7 +27,7 @@ export default class TdConsumer {
         this.config = config;
         this.protocols = protocols;
         this.tdJson = null;
-        this.tdConsumed = null;
+        this.consumedTd = null;
         this.tdState = null;
         this.errorMsg = null;
         // instantiate Servient and Helper
@@ -48,7 +48,7 @@ export default class TdConsumer {
     }
     public async getConsumedTd(): Promise<{
         tdJson: JSON | null,
-        tdConsumed: WoT.ConsumedThing | null,
+        consumedTd: WoT.ConsumedThing | null,
         tdState: TdStateEnum | null,
         errorMsg: string | null
     }> {
@@ -59,7 +59,7 @@ export default class TdConsumer {
 
         return {
             tdJson: this.tdJson,
-            tdConsumed: this.tdConsumed,
+            consumedTd: this.consumedTd,
             tdState: this.tdState,
             errorMsg: this.errorMsg
         };
@@ -99,7 +99,7 @@ export default class TdConsumer {
     private async parseTdJson(td: string) {
         this.tdState = null;
         this.tdJson = null;
-        this.tdConsumed = null;
+        this.consumedTd = null;
         this.errorMsg = null;
 
         if (!td.length) return;
@@ -152,7 +152,7 @@ export default class TdConsumer {
         await this.servient.start().then( async (factory: WoT.WoT) => {
             if (this.tdJson) {
                 const TdPromise = factory.consume(this.tdJson);
-                await TdPromise.then( (Td) => {this.tdConsumed = Td; },
+                await TdPromise.then( (Td) => {this.consumedTd = Td; },
                 (err) => {throw new Error('Td was not consumed successfully' + err); } );
                 this.tdState = TdStateEnum.VALID_CONSUMED_TD;
                 this.errorMsg = null;
@@ -161,7 +161,7 @@ export default class TdConsumer {
                 throw new Error('tdJson is undefined');
             }
         }).catch((err) => {
-            this.tdConsumed = null;
+            this.consumedTd = null;
             this.tdState = TdStateEnum.INVALID_CONSUMED_TD;
             this.errorMsg = err;
             this.servient.shutdown();

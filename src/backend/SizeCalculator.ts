@@ -37,10 +37,10 @@ export default class SizeCalculator {
         }
 
         function formatByteSize(byt: number): string {
-            if (byt < 1024) return byt + ' bytes';
-            else if (byt < 1048576) return(byt / 1024).toFixed(3) + ' KiB';
-            else if (byt < 1073741824) return(byt / 1048576).toFixed(3) + ' MiB';
-            else return(byt / 1073741824).toFixed(3) + ' GiB';
+            if (byt < 1024) return byt + ' Bytes';
+            else if (byt < 1048576) return(byt / 1024).toFixed(3) + ' KB';
+            else if (byt < 1073741824) return(byt / 1048576).toFixed(3) + ' MB';
+            else return(byt / 1073741824).toFixed(3) + ' GB';
         }
 
         return formatByteSize(sizeOf(object));

@@ -15,8 +15,8 @@
                 </div>
                 <div class="flex-container-row align-items-center">
                     <label>Max:</label>
-                    <input type="number" :min="generationForm.minInputs" v-model.number="generationForm.maxInputs"
-                    @input="setMaxInputInteractions"
+                    <input type="number" :min="1" v-model.number="generationForm.maxInputs"
+                    @input="setMinInputInteractions"
                     >
                 </div>
             </div>
@@ -30,8 +30,8 @@
                 </div>
                 <div class="flex-container-row align-items-center">
                     <label>Max:</label>
-                    <input type="number" :min="generationForm.minOutputs" v-model.number="generationForm.maxOutputs"
-                    @input="setMaxOutputInteractions"
+                    <input type="number" :min="1" v-model.number="generationForm.maxOutputs"
+                    @input="setMinOutputInteractions"
                     >
                 </div>
             </div>
@@ -83,6 +83,7 @@
         btnLabel="Generate Code for the currently viewed Mashup"
         btnClass="btn-grey"
         btnOnClick="generate-code"
+        :btnActive="true"
         @generate-code="generateCode"
         v-show="resultReady"
         />
@@ -92,9 +93,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { EventEmitter } from 'events';
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex';
-import { ElementTypeEnum } from '@/util/enums';
 import { Mashup, TD } from '@/backend/Td';
 import { GenerationForm } from '@/backend/MaGe/generator';
 import aButtonBasic from '@/components/01_atoms/aButtonBasic.vue';
@@ -108,7 +107,6 @@ import mTableSimple from '@/components/02_molecules/mTableSimple.vue';
 import mTableMaGe from '@//components/02_molecules/mTableMaGe.vue';
 import mTemplateSelectionArea from '@/components/02_molecules/mTemplateSelectionAreaMaGe.vue';
 import mFilterConstraintsAreaMaGe from '@/components/02_molecules/mFilterConstraintsAreaMaGe.vue';
-import generateMashups from '@/backend/MaGe/generator.ts';
 
 export default Vue.extend({
     components: {
@@ -233,6 +231,16 @@ export default Vue.extend({
                     break;
                 default: return;
             }
+        },
+        setMinInputInteractions(): void {
+            this.generationForm.minInputs = this.generationForm.minInputs < this.generationForm.maxInputs
+            ? this.generationForm.minInputs
+            : this.generationForm.maxInputs;
+        },
+        setMinOutputInteractions(): void {
+            this.generationForm.minOutputs = this.generationForm.minOutputs < this.generationForm.maxOutputs
+            ? this.generationForm.minOutputs
+            : this.generationForm.maxOutputs;
         },
         setMaxInputInteractions(): void {
             this.generationForm.maxInputs = this.generationForm.minInputs > this.generationForm.maxInputs

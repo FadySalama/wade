@@ -8,8 +8,8 @@
             </p>
         </div>
         <div id="selection-area">
-                <input type="checkbox" :checked="isChecked" @input="$emit('input', $event.target.checked)">
-                <label> Use this template </label>
+                <input type="checkbox" :id="this.title.toLowerCase()" :checked="isChecked" @input="$emit('input', $event.target.checked)">
+                <label :for="this.title.toLowerCase()"> Use this template </label>
         </div>
     </div>
 </template>

@@ -469,7 +469,7 @@ export default class PerformancePrediction {
     private getInput(input: any): WADE.PerformanceInput {
         return {
             size: input
-                ? new SizeCalculator().getSize(input)
+                ?  SizeCalculator.getSize(input)
                 : 'n.a.',
             value: input ?  input : 'No input'
         };
@@ -496,7 +496,7 @@ export default class PerformancePrediction {
             if (key === 'success' || key === 'Success') {
                 resultOutput.push({ size: 'n.a.', value: 'No Output', amount: value});
             } else {
-                resultOutput.push({size: new SizeCalculator().getSize(key), value: key, amount: value});
+                resultOutput.push({size: SizeCalculator.getSize(key), value: key, amount: value});
             }
         }
         return resultOutput;

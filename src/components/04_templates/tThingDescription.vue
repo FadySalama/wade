@@ -47,14 +47,22 @@
           </div>
         </div>
         <div class="td-testing-area">
-          <div class="td-main-middle border-right">
-            <oSelection />
+          <div class="interaction-selection-area">
+            <mInteractionSelectorEditor/>
+          </div>
+          <div>
+            <!-- <aOptionElement 
+              v-for="(element, index) in selectedInteractionNames"
+              :key="element + index"
+              :firstElement="element"
+              class="darkgreen"
+            /> -->
+            <mInteractionSelectionEditor/>
           </div>
           <div class="td-main-right">
             <oResults />
           </div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -66,6 +74,8 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
 import aStatusbar from '@/components/01_atoms/aStatusbar.vue';
 import mTabbar from '@/components/02_molecules/mTabbar.vue';
 import mUrlBar from '@/components/02_molecules/mUrlBar.vue';
+import mInteractionSelectorEditor from '@/components/02_molecules/mInteractionSelectorEditor.vue';
+import mInteractionSelectionEditor from '@/components/02_molecules/mInteractionSelectionEditor.vue';
 import oConfig from '@/components/03_organisms/oConfig.vue';
 import oEditor from '@/components/03_organisms/oEditor.vue';
 import oVirtual from '@/components/03_organisms/oVirtual.vue';
@@ -87,6 +97,8 @@ export default Vue.extend({
     oVirtualThing,
     oSelection,
     oResults,
+    mInteractionSelectorEditor,
+    mInteractionSelectionEditor,
     mTabbar,
     mUrlBar,
     tPerformance
@@ -213,6 +225,11 @@ export default Vue.extend({
   height: 100%;
   width: 100%;
   display: flex;
+}
+
+.interaction-selection-area {
+  width: 40%;
+  margin: 1pt;
 }
 
 .td-performance {

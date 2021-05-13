@@ -3,11 +3,11 @@
  */
 export default class SizeCalculator {
 
-    public getSize(el: any) {
+    public static getSize(el: any) {
         return this.memorySizeOf(el);
     }
 
-    private memorySizeOf(object: any): string {
+    private static memorySizeOf(object: any): string {
         let bytes = 0;
 
         function sizeOf(obj: any): number {

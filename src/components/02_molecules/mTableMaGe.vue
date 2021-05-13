@@ -68,7 +68,6 @@ export default Vue.extend({
         },
         onAddElementSelected(event) {
             const children: Array<TD | Mashup> = this.$store.getters['MashupStore/getMashupChildren'];
-            this.table.columns[0].header.toLowerCase;
             let childNeeded;
             for (const child of children) {
                 if (child.id === event.btnValue) childNeeded = child;

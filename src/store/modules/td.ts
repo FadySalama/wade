@@ -1,4 +1,5 @@
 import * as Api from '@/backend/Api';
+import { ParsedTd } from '@/backend/TdParser';
 import { RESULT_MESSAGES, VtStatus } from '@/util/enums';
 import { InteractionStateEnum, TdStateEnum, ProtocolEnum } from '@/util/enums';
 
@@ -13,12 +14,12 @@ export default {
         protocols: [] as ProtocolEnum[],
 
         tdEditor: {},
-        tdParsed: {},
+        tdParsed: {} as ParsedTd,
 
         interactionState: null,
 
         interactions: [],
-        selections: [],
+        selections: [] as {name: string, type: string, op: string, protocol: string}[],
         resultProps: [],
         resultActions: [],
         resultEvents: [],
@@ -143,9 +144,9 @@ export default {
                 || parsedTdPayload.tdState === TdStateEnum.VALID_CONSUMED_TD
             ) {
                 commit('setTdParsed', parsedTdPayload.parsedTd);
-                const hasInteractions = state.tdParsed.propertyInteractions.length > 0
-                    || state.tdParsed.actionInteractions.length > 0
-                    || state.tdParsed.eventInteractions.length > 0;
+                const hasInteractions = (state.tdParsed as ParsedTd).parsedProperties.length > 0
+                    || (state.tdParsed as ParsedTd).parsedActions.length > 0
+                    || (state.tdParsed as ParsedTd).parsedEvents.length > 0;
                 interactionState = hasInteractions
                     ? InteractionStateEnum.NOT_SELECTED
                     : InteractionStateEnum.NO_INTERACTIONS;
@@ -217,11 +218,13 @@ export default {
         async invokeInteractions({ commit, state }) {
             commit('setInteractionState', InteractionStateEnum.INVOKED);
             commit('setStatusMessage');
-            const selectedInteractions = state.selections;
-            const results = await Api.invokeInteractions(selectedInteractions);
-            commit('setResultProps', results.resultProps);
-            commit('setResultActions', results.resultActions);
-            commit('setResultEvents', results.resultEvents);
+            const selectedInteractions: {name: string, type: string, op: string, protocol: string}[] = state.selections;
+            const tdParsed: ParsedTd = state.tdParsed;
+            
+            // const results = await Api.invokeInteractions(selectedInteractions);
+            // commit('setResultProps', results.resultProps);
+            // commit('setResultActions', results.resultActions);
+            // commit('setResultEvents', results.resultEvents);
         },
         // Invoke interactions for performance prediction
         async getPerformancePrediction({ commit, state }, payload) {
@@ -279,6 +282,12 @@ export default {
         },
         setSelections(state: any, payload: any) {
             state.selections = payload;
+            state.interactionState = Object.entries(payload).length > 0
+                ? InteractionStateEnum.NOT_INVOKED
+                : InteractionStateEnum.NOT_SELECTED;
+        },
+        pushToSelections(state: any, payload: any[]) {
+            state.selections.push(...payload);
             state.interactionState = Object.entries(payload).length > 0
                 ? InteractionStateEnum.NOT_INVOKED
                 : InteractionStateEnum.NOT_SELECTED;
@@ -370,6 +379,21 @@ export default {
             if (!state.areInteractionsInvoked) {
                 return RESULT_MESSAGES.NO_INTERACTIONS_INVOKED;
             }
-        }
+        },
+        getParsedTdPropertiesList(state: any) {
+            return (state.tdParsed as ParsedTd).parsedProperties;
+        },
+        getParsedTdActionsList(state: any) {
+            return (state.tdParsed as ParsedTd).parsedActions;
+        },
+        getParsedTdEventsList(state: any) {
+            return (state.tdParsed as ParsedTd).parsedEvents;
+        },
+        getParsedTdProtocols(state: any) {
+            return (state.tdParsed as ParsedTd).availableProtocols;
+        },
+        getParsedTdOperations(state: any) {
+            return (state.tdParsed as ParsedTd).availableOperations;
+        },
     }
 };

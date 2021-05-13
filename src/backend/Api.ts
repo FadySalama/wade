@@ -1,5 +1,6 @@
 import TdConsumer from './TdConsumer';
 import TdParser from './TdParser';
+import store from '@/store/store';
 import PerformancePrediction from './PerformancePrediction';
 import ConfidenceCalculator from './ConfidenceCalculator';
 import {
@@ -114,9 +115,9 @@ export async function consumeAndParseTd(
       tdState: consumedTdPayload.tdState
     };
   }
-  const parsedTd = new TdParser(consumedTdPayload.consumedTd, protocols).getParsedTd();
+  const parsedTd = new TdParser(consumedTdPayload.consumedTd).getParsedTd();
   return {
-    parsedTd: parsedTd,
+    parsedTd,
     errorMsg: null,
     tdState: consumedTdPayload.tdState
   };
@@ -165,121 +166,8 @@ export async function startPerformancePrediction(
   return performanceResult;
 }
 
-export async function invokeInteractions(selectedInteractions) {
-  const resultProps: any[] = [];
-  const resultActions: any[] = [];
-  const resultEvents: any[] = [];
-
-  for (const interaction in selectedInteractions) {
-    if (!selectedInteractions.hasOwnProperty(interaction)) {
-      continue;
-    }
-
-    const {
-      interactionName,
-      interactionSelectBtn,
-      interactionTitle,
-      interactionType
-    } = selectedInteractions[interaction];
-
-    switch (interactionType) {
-      case PossibleInteractionTypesEnum.PROP_READ:
-        if (interactionSelectBtn.interaction) {
-          // Invoke property read (no input)
-          const resultProp = await selectedInteractions[interaction].interactionSelectBtn.interaction();
-
-          resultProps.push({
-            resultType: PossibleInteractionTypesEnum.PROP_READ,
-            resultTitle: interactionTitle,
-            resultValue: resultProp.error ? resultProp.error : resultProp.res,
-            resultTime: `${resultProp.s} sec ${resultProp.ms} ms`,
-            resultError: resultProp.error ? true : false,
-            resultSize: resultProp.size
-          });
-        }
-        break;
-
-      case PossibleInteractionTypesEnum.PROP_WRITE:
-        if (interactionSelectBtn.interaction) {
-          // Invoke property write (with input)
-          const resultProp = await selectedInteractions[interaction].interactionSelectBtn.interaction(interactionSelectBtn.input);
-
-          resultProps.push({
-            resultType: PossibleInteractionTypesEnum.PROP_READ,
-            resultTitle: interactionTitle,
-            resultValue: resultProp.error ? resultProp.error : resultProp.res,
-            resultTime: `${resultProp.s}sec ${resultProp.ms}ms`,
-            resultError: resultProp.error ? true : false,
-            resultSize:
-              resultProp.size === undefined
-                ? 'n.a.'
-                : `Input ${resultProp.size}`
-          });
-        }
-        break;
-
-      case PossibleInteractionTypesEnum.PROP_OBSERVE_READ:
-      case PossibleInteractionTypesEnum.PROP_OBSERVE_WRITE:
-        if (interactionSelectBtn.interaction) {
-          const resultProp = await selectedInteractions[interaction].interactionSelectBtn.interaction();
-
-          resultProps.push({
-            resultType: PossibleInteractionTypesEnum.PROP_OBSERVE_READ,
-            resultTitle: interactionTitle,
-            resultValue: resultProp.error ? resultProp.error : resultProp.res,
-            resultError: resultProp.error ? true : false
-          });
-        }
-        break;
-
-      case PossibleInteractionTypesEnum.EVENT_SUB:
-        // Subscribe to event
-        if (interactionSelectBtn.interaction) {
-          let resultEvent = await selectedInteractions[interaction].interactionSelectBtn.interaction();
-
-          resultEvents.push({
-            resultType: PossibleInteractionTypesEnum.EVENT_SUB,
-            resultTitle: interactionTitle,
-            resultValue: resultEvent = resultEvent.error
-              ? resultEvent.error
-              : resultEvent, // resultEvent is an object with callbacks
-            resultError: resultEvent.error ? true : false
-          });
-        }
-        break;
-
-      case PossibleInteractionTypesEnum.EVENT_UNSUB:
-        // TODO: Unsubscribe from event
-        break;
-
-      case PossibleInteractionTypesEnum.ACTION:
-        if (interactionSelectBtn.interaction) {
-          // Invoke action (possibly with input)
-          const resultAction = await selectedInteractions[interaction].interactionSelectBtn.interaction(interactionSelectBtn.input);
-
-          resultActions.push({
-            resultType: PossibleInteractionTypesEnum.ACTION,
-            resultTitle: interactionTitle,
-            resultValue: resultAction.error
-              ? resultAction.error
-              : resultAction.res,
-            resultTime: `${resultAction.s} sec ${resultAction.ms} ms`,
-            resultError: resultAction.error ? true : false,
-            resultSize: resultAction.size
-          });
-        }
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  return {
-    resultProps,
-    resultActions,
-    resultEvents
-  };
+export async function invokeInteractions(selectedInteractions: Array<{title: string, interactionType: PossibleInteractionTypesEnum, protocol: ProtocolEnum}>) {
+  
 }
 
 export function createNewVt(

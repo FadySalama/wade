@@ -151,47 +151,47 @@ declare global {
 
   // ===========================================================================
     interface TdDataSchemaInterface {
-      type: DataSchemaTypes
-      enum?: any[]
-      readOnly: boolean
-      writeOnly: boolean
-      [key: string]: any
+      type: DataSchemaTypes;
+      enum?: any[];
+      readOnly: boolean;
+      writeOnly: boolean;
+      [key: string]: any;
     }
     interface TdArraySchemaInterface extends TdDataSchemaInterface {
-      type: DataSchemaTypes.ARRAY
+      type: DataSchemaTypes.ARRAY;
       items?: TdDataSchemaInterface | TdDataSchemaInterface[];
-      minItems?: number
-      maxItems?: number
+      minItems?: number;
+      maxItems?: number;
     }
 
     interface TdBooleanSchemaInterface extends TdDataSchemaInterface {
-      type: DataSchemaTypes.BOOL
+      type: DataSchemaTypes.BOOL;
     }
 
     interface TdNumberSchemaInterface extends TdDataSchemaInterface {
-      type: DataSchemaTypes.NUM
-      minimum?: number
-      maximum?: number
+      type: DataSchemaTypes.NUM;
+      minimum?: number;
+      maximum?: number;
     }
 
     interface TdIntegerSchemaInterface extends TdDataSchemaInterface {
-      type: DataSchemaTypes.INT
-      minimum?: number
-      maximum?: number
+      type: DataSchemaTypes.INT;
+      minimum?: number;
+      maximum?: number;
     }
 
     interface TdObjectSchemaInterface extends TdDataSchemaInterface {
-      type: DataSchemaTypes.OBJ
-      properties?: {[key: string]: TdDataSchemaInterface}
-      required?: string[]
+      type: DataSchemaTypes.OBJ;
+      properties?: {[key: string]: TdDataSchemaInterface};
+      required?: string[];
     }
 
     interface TdStringSchemaInterface extends TdDataSchemaInterface {
-      type: DataSchemaTypes.STRING
+      type: DataSchemaTypes.STRING;
     }
 
     interface TdNullSchemaInterface extends TdDataSchemaInterface {
-      type: DataSchemaTypes.NULL
+      type: DataSchemaTypes.NULL;
     }
     interface TdFormInterface {
       op: string | string[];
@@ -199,16 +199,16 @@ declare global {
       [key: string]: any;
     }
     interface TdInteractionInterface {
-      title: string;
+      interactionName: string;
       description?: string;
-      interactionType: InteractionAffordancesTypes
+      interactionType: InteractionAffordancesTypes;
       forms: TdFormInterface[];
       uriVariables?: {[key: string]: TdDataSchemaInterface};
-      base?: string,
+      base?: string;
     }
 
     interface TdPropertyInteractionInterface extends TdInteractionInterface, TdDataSchemaInterface {
-      observable?: boolean
+      observable?: boolean;
     }
 
     interface TdActionInteractionInterface extends TdInteractionInterface {
@@ -220,7 +220,7 @@ declare global {
 
     interface TdEventInteractionInterface extends TdInteractionInterface {
       subscription?: TdDataSchemaInterface;
-      data?: TdDataSchemaInterface
+      data?: TdDataSchemaInterface;
       cancellation?: TdDataSchemaInterface;
     }
 

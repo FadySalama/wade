@@ -77,8 +77,8 @@ export enum TdStateEnum {
 export enum TdConfigEnum {
   INFO = 'This config will be used for your TD.',
   UNSAVED = 'Please save your changes to apply them',
-  SAVE_SUCCESS = 'Config was safed successfully.',
-  RESET = 'Config was resetted to default config. Click save to apply this.',
+  SAVE_SUCCESS = 'Config was saved successfully.',
+  RESET = 'Config was reset to default config. Click save to apply this.',
   ERROR = 'Error: Wrong data format. Change config to make it saveable.'
 }
 
@@ -88,8 +88,8 @@ export enum TdConfigEnum {
 export enum TdVirtualConfigEnum {
   INFO = 'This config will be used to generate a Virtual Thing for your TD',
   UNSAVED = 'Please save your changes to apply them',
-  SAVE_SUCCESS = 'Virtual Thing config was safed successfully.',
-  RESET = 'Virtual Thing config was resetted to default config. Save to apply!',
+  SAVE_SUCCESS = 'Virtual Thing config was saved successfully.',
+  RESET = 'Virtual Thing config was reset to default config. Save to apply!',
   ERROR = 'Error: Wrong data format. Change Virtual Thing config to make it saveable.'
 }
 

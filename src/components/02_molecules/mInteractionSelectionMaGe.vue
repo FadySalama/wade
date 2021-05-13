@@ -75,9 +75,9 @@ export default Vue.extend({
         },
         templates: {
             type: Object as () => {
-            'use-event-template': Boolean,
-            'use-action-template': Boolean,
-            'use-read-template': Boolean,
+            'use-event-template': boolean,
+            'use-action-template': boolean,
+            'use-read-template': boolean,
             },
             required: true
         }

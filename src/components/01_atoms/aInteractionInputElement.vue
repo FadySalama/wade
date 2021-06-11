@@ -1,6 +1,10 @@
 <template>
-  <div>
-    
+  <div input-field>
+    <select v-if="inputScheme.type = 'boolean'" :value="inputValue" @input="$emit('input', $event.target.value)">
+      <option value="true">True</option>
+      <option value="false">False</option>
+    </select>
+
   </div>
 </template>
 
@@ -18,31 +22,20 @@ export default Vue.extend({
     };
   },
   props: {
-    interacation: {
-      type: parsedInteraction,
+    inputName: {
+      type: String,
       required: true
     },
-    op: {
-      type: String,
-      validator: function (value) {
-        // The value must match one of these strings
-        return ["read", "write", "observe", "unobserve", "invoke", "subscribe", "unsubscribe"].indexOf(value) !== -1
-      }
+    inputScheme: {
+      type: Object as () => WADE.TdDataSchemaInterface,
+      required: true
+    },
+    inputValue: {
+      required: true
     }
   },
   computed: {
-    inputSchema() {
-      // Handle uriVariable
-      let uriVariables = this.interacation.uriVariables;
-      if(uriVariables) for(let uriVariable in uriVariables) {
-
-      }
-      switch(this.interacation.interactionType) {
-        // Handle Properties
-        case InteractionAffordancesTypes.PROP:
-        
-      }
-    }
+  
   },
   methods: {
   }

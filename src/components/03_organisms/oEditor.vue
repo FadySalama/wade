@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="editor-area">
-      <aEditorMonaco v-model="currentTd" language="json"/>
+      <aEditorMonaco v-model="currentTd" language="json" :diagnosticOptionsParamters="diagParams"/>
     </div>
     <div class="config-btns">
       <aButtonBasic
@@ -64,6 +64,10 @@ export default Vue.extend({
         btnLabel: 'Save',
         btnClass: 'btn-config-small',
         btnOnClick: 'save-td'
+      },
+      diagParams: {
+        modelUri: "urn:td",
+        schemaUri: "td-schema",
       }
     };
   },

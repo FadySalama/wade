@@ -1,5 +1,4 @@
 import Vue, { VNode } from 'vue';
-import { DataSchema } from 'wot-typescript-definitions';
 import { VtStatus } from './util/enums';
 
 
@@ -149,7 +148,14 @@ declare global {
       confidence: InteractionTimingConfidence;
   }
 
-  // ===========================================================================
+  // =============================================================================
+  // ---------------------- Front-end objects and interfaces ---------------------
+  // =============================================================================
+
+    interface MonacoDiagnosticOptions {
+      modelUri: string
+      schema: "td-schema" | object
+    }
     interface TdDataSchemaInterface {
       type: DataSchemaTypes;
       enum?: any[];

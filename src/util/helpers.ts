@@ -1,3 +1,4 @@
+import path from "path"
 
 export function getFormattedJsonString(value: string): string {
     return JSON.stringify(JSON.parse(value), null, 2);
@@ -17,6 +18,32 @@ export function loggingError(message: any, ...optionalParams: any[]) {
 export function isDevelopment(): boolean {
     const isDevMode = process.env.NODE_ENV !== 'production';
     return isDevMode;
+}
+
+export function getRootDirInDev() {
+    if (process.platform === 'darwin') {
+        return path.join(
+          __dirname,
+          '..',
+          '..',
+          '..',
+          '..',
+          '..',
+          '..',
+          '..',
+          '..'
+        );
+      } else {
+        return path.join(
+          __dirname,
+          '..',
+          '..',
+          '..',
+          '..',
+          '..',
+          '..'
+        );
+      }
 }
 
 export const ConfLevel = new Map([

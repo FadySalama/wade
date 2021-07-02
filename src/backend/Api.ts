@@ -9,7 +9,7 @@ import {
   InteractionStateEnum,
   ProtocolEnum
 } from '@/util/enums';
-import { isDevelopment } from '@/util/helpers';
+import { getRootDirInDev, isDevelopment } from '@/util/helpers';
 import MessageHandler from './MessageHandler';
 import VtCall from './VtCall';
 import * as stream from 'stream';
@@ -209,31 +209,7 @@ export function showExampleTds() {
     let pathToExamples: string;
 
     if (isDevelopment()) {
-      if (process.platform === 'darwin') {
-        pathToExamples = path.join(
-          __dirname,
-          '..',
-          '..',
-          '..',
-          '..',
-          '..',
-          '..',
-          '..',
-          '..',
-          'example-tds'
-        );
-      } else {
-        pathToExamples = path.join(
-          __dirname,
-          '..',
-          '..',
-          '..',
-          '..',
-          '..',
-          '..',
-          'example-tds'
-        );
-      }
+        pathToExamples = path.join(getRootDirInDev(), 'example-tds');
     } else {
       if (process.resourcesPath) {
         pathToExamples = path.join(process.resourcesPath, 'example-tds');

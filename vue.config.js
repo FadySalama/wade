@@ -5,7 +5,7 @@ module.exports = {
     electronBuilder: {
       builderOptions: {
         // options placed here will be merged with default configuration and passed to electron-builder
-        extraResources: ["example-tds", "./node_modules/virtual-thing"],
+        extraResources: ["example-tds", "./node_modules/virtual-thing", "./src/util/td-schema.json"],
       },
     },
   },

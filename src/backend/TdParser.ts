@@ -123,9 +123,11 @@ export class parsedInteraction implements WADE.TdInteractionInterface {
       let hrefProtocol =  form.href.split(':')[0];
       let operations = form.op;
       if(typeof operations === 'undefined') {
+        operations = []
         switch (this.interactionType) {
           case InteractionAffordancesTypes.PROP:
-            operations = ['readproperty','writeproperty'];
+            if(!(interactionObj as WADE.TdPropertyInteractionInterface).writeOnly) operations.push('readproperty');
+            if(!(interactionObj as WADE.TdPropertyInteractionInterface).readOnly) operations.push('writeproperty');
             break;
           case InteractionAffordancesTypes.ACTION:
             operations = ['invokeaction'];
@@ -277,9 +279,12 @@ export class parsedProperty extends parsedInteraction implements WADE.TdProperty
     // search the forms
     for (const [formIndex, form] of this.forms.entries()) {
       const hrefProtocol = form.href.split(':')[0];
-      let operations: string[];
+      let operations: string[] = [];
       // if form op is undefined, treat as readproperty and writeproperty according to standard
-      if (typeof form.op === 'undefined') operations = ['readproperty', 'writeproperty'];
+      if (typeof form.op === 'undefined') {
+        if(!this.writeOnly) operations.push('readproperty');
+        if(!this.readOnly) operations.push('writeproperty');
+      }
       // convert operations to array
       if (typeof form.op === 'string') operations = [form.op]; else operations = form.op;
       // check if base has same protocol and form has the operation

@@ -14,9 +14,9 @@
       </div>
     </div>
     <div class="editor-area">
-      <aEditorMonaco v-model="currentTd" language="json" :diagnosticOptionsParamters="diagParams"/>
+      <aEditorMonaco v-model="currentTd" language="json" id="td-editor" :diagnosticOptionsParamters="diagParams" @save="$store.commit('SidebarStore/saveTd', { content: td, id })"/>
     </div>
-    <div class="config-btns">
+    <!-- <div class="config-btns">
       <aButtonBasic
         v-on:open-config-tab="$emit('open-config')"
         :btnClass="saveTdBtn.btnClass"
@@ -31,7 +31,7 @@
         :btnOnClick="saveTdBtn.btnOnClick"
         :btnActive="td.length > 0"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default Vue.extend({
       },
       diagParams: {
         modelUri: "urn:td",
-        schemaUri: "td-schema",
+        schema: "td-schema",
       }
     };
   },
@@ -101,6 +101,7 @@ export default Vue.extend({
   methods: {
     ...mapMutations('SidebarStore', ['saveTdProtocols']),
     ...mapActions('TdStore', [
+      'resetAll',
       'resetInteractions',
       'resetSelections',
       'resetResults',
@@ -130,10 +131,8 @@ export default Vue.extend({
       });
       // Hide url bar if td changed
       this.$emit('hide-url-bar');
-      // Reset result fields and interaction fields
-      (this as any).resetInteractions();
-      (this as any).resetSelections();
-      (this as any).resetResults();
+      // Reset result fields, interaction fields and log
+      (this as any).resetAll();
       // Update possible protocol list
       this.$eventHub.$emit('selections-reseted');
     },
@@ -192,16 +191,7 @@ export default Vue.extend({
 }
 .editor-area {
   width: 100%;
-  height: 84%;
-  max-height: 800px;
-}
-.editor-area textarea {
-  width: 100%;
-  height: 100%;
-  resize: none;
-  padding: 7px;
-  font-family: "Courier New", Courier, monospace;
-  color: #000;
+  height: 92.7%;
 }
 .config-btns {
   height: 8%;

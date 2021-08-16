@@ -46,6 +46,16 @@ export enum PossibleInteractionTypesEnum {
   EVENT_UNSUB = 'event-unsubscribe'
 }
 
+export enum PossibleInteractionOpsEnum {
+  PROP_READ = 'readproperty',
+  PROP_WRITE = 'writeproperty',
+  PROP_OBSERVE = 'observeproperty',
+  PROP_UNOBSERVE= 'unobserveproperty',
+  ACTION = 'invokeaction',
+  EVENT_SUB = 'subscribeevent',
+  EVENT_UNSUB = 'unsubscribeevent'
+}
+
 export enum InteractionStateEnum {
   // No / invalid td
   NO_INTERACTIONS = 'No interactions can be shown.',

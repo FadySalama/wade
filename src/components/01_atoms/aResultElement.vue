@@ -61,8 +61,7 @@ export default Vue.extend({
         }
     },
     created() {
-        // this.$eventHub.$on('unsubscribe', this.unsubscribe());
-        if (this.isSubscription) this.getResultValue();
+        
     },
     beforeDestroy() {
         // this.$eventHub.$off('unsubscribe');
@@ -86,50 +85,6 @@ export default Vue.extend({
         };
     },
     methods: {
-        getResultValue() {
-            try {
-                /**
-                 * Subscribing to an event is triggered here.
-                 * This is due to the fact, that with node-wot v0.6.2
-                 * it is not possible to directly unsubscribe an interaction.
-                 * You have to unsubscribe the 'subscription'
-                 * (it is returned when subscribing).
-                 * Once you deleted the subscription via 'unsubscribe()',
-                 * you need to restart the servient.
-                 *
-                 * TODO: could be now restructured (because of the new API)
-                 */
-                if (this.subscription) (this as any).resultValue.unsubscribe();
-                this.subscription = (this as any).resultValue.subscribe(
-                    (res) => {
-                        // this.resultValText = res;
-                        this.resultBuffer = res;
-                        this.writeResult();
-                    }
-                );
-            } catch (error) {
-                return `Error: ${error}`;
-            }
-        },
-        unsubscribe() {
-            if (this.unsubscribed) return;
-            this.unsubscribed = !this.unsubscribed;
-            if (!this.subscription) return;
-            try {
-                (this as any).resultValue.unsubscribe();
-            } catch (error) {
-                // Show error here
-                // TODO add error treatment
-            }
-        },
-        // Workaround function, because unsubscribeEvent() does not work in APIv070-SNAP3
-        writeResult() {
-            if (this.unsubscribed) {
-                return;
-            } else {
-                this.resultValText = this.resultBuffer;
-            }
-        }
     }
 });
 </script>

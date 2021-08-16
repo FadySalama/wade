@@ -1,6 +1,6 @@
 import * as Api from '@/backend/Api';
 import { ParsedTd } from '@/backend/TdParser';
-import { RESULT_MESSAGES, VtStatus } from '@/util/enums';
+import { PossibleInteractionOpsEnum, RESULT_MESSAGES, VtStatus } from '@/util/enums';
 import { InteractionStateEnum, TdStateEnum, ProtocolEnum } from '@/util/enums';
 
 export default {
@@ -19,10 +19,13 @@ export default {
         interactionState: null,
 
         interactions: [],
-        selections: [] as {name: string, type: string, op: string, protocol: string}[],
+        selections: [] as WADE.VueInteractionConfig[],
         resultProps: [],
         resultActions: [],
         resultEvents: [],
+
+        logText: "",
+
         virtualThing: undefined,
         VtExists: false,
         vtOutputStd: '',
@@ -169,6 +172,7 @@ export default {
             commit('setSelections', []);
             commit('setResults', []);
             commit('setStatusMessage');
+            commit('resetLog');
         },
         async resetInteractions({ commit }) {
             commit('setInteractions', []);
@@ -182,45 +186,128 @@ export default {
         },
 
         // Add new interaction or change interaction input (without changing the order of selected interactions).
-        async addToSelectedInteractions({ commit, state }: any, payload: { changeInteraction: any; newInteraction: any; }) {
-            if (!payload.changeInteraction && !payload.newInteraction) return;
-
-            const selectedInteractions = state.selections;
-
-            const interaction = payload.changeInteraction
-                ? payload.changeInteraction
-                : payload.newInteraction ? payload.newInteraction : null;
-            const index = selectedInteractions.indexOf(interaction);
-            const isNew = payload.newInteraction ? true : false;
-
-            if (isNew) {
-                // Remove interaction if it already exists
-                if (index !== -1) selectedInteractions.splice(index, 1);
-                // Add to selected interactions
-                selectedInteractions.push(interaction);
-            } else {
-                // Replace selected interaction when input changed
-                selectedInteractions[index] = interaction;
-            }
+        addToSelectedInteractions({ commit, state }: any, payload: {interaction: WADE.VueInteractionConfig}) {
+            const selectedInteractions: WADE.VueInteractionConfig[] = state.selections;
+            selectedInteractions.push(payload.interaction);
             commit('setSelections', selectedInteractions);
             commit('setStatusMessage');
-            return selectedInteractions;
         },
+
+        updateSelectedInteraction({ commit, state }: any, payload: {index: number, interaction: WADE.VueInteractionConfig}) {
+            let selectedInteractions: WADE.VueInteractionConfig[] = state.selections;
+            selectedInteractions[payload.index] = payload.interaction;
+            commit('setSelections', selectedInteractions);
+            commit('setStatusMessage');
+        },
+
+        updateSelectedInteractionList({ commit, state }: any, payload: {index: number, list: WADE.VueInteractionConfig[]}) {
+            commit('setSelections', payload.list);
+            commit('setStatusMessage');
+        },
+        // async addToSelectedInteractions({ commit, state }: any, payload: { changeInteraction: any; newInteraction: any; }) {
+        //     if (!payload.changeInteraction && !payload.newInteraction) return;
+
+        //     const selectedInteractions = state.selections;
+
+        //     const interaction = payload.changeInteraction
+        //         ? payload.changeInteraction
+        //         : payload.newInteraction ? payload.newInteraction : null;
+        //     const index = selectedInteractions.indexOf(interaction);
+        //     const isNew = payload.newInteraction ? true : false;
+
+        //     if (isNew) {
+        //         // Remove interaction if it already exists
+        //         if (index !== -1) selectedInteractions.splice(index, 1);
+        //         // Add to selected interactions
+        //         selectedInteractions.push(interaction);
+        //     } else {
+        //         // Replace selected interaction when input changed
+        //         selectedInteractions[index] = interaction;
+        //     }
+        //     commit('setSelections', selectedInteractions);
+        //     commit('setStatusMessage');
+        //     return selectedInteractions;
+        // },
         // Remove specific interaction from interactions to be invoked
-        async removeFromSelectedInteractions({ commit, state }, payload) {
-            const selectedInteractions = state.selections;
-            selectedInteractions.splice(selectedInteractions.indexOf(payload.interactionToRemove), 1);
+        async removeFromSelectedInteractions({ commit, state }, payload: {index: number}) {
+            const selectedInteractions: WADE.VueInteractionConfig[] = state.selections;
+            selectedInteractions.splice(payload.index, 1);
             commit('setSelections', selectedInteractions);
             commit('setStatusMessage');
             return selectedInteractions;
         },
         // Invoke all selected interaction
         async invokeInteractions({ commit, state }) {
+            const selectedInteractions: WADE.VueInteractionConfig[] = state.selections;
+            const tdParsed: ParsedTd = state.tdParsed;
+            for(let interactionConfig of selectedInteractions) {
+                switch(interactionConfig.type) {
+                    case 'properties':
+                        let property = tdParsed.parsedProperties.find((prop) => prop.interactionName === interactionConfig.name);
+                        if(!property) return;
+                        switch(interactionConfig.op) {
+                            case PossibleInteractionOpsEnum.PROP_READ:
+                                commit('addToLog', `Read property ${interactionConfig.name}...`);
+                                property.readProperty(interactionConfig.protocol, interactionConfig.uriVariables).then(
+                                    (responseObj) => {
+                                        if(responseObj.interactionSuccessful) {
+                                            let result = responseObj.resultBody;
+                                            if(typeof result === 'object') result = JSON.stringify(result);
+                                            commit('addToLog', `Read property ${interactionConfig.name} was succesful.`);
+                                            commit('addToLog', `read ${interactionConfig.name}: response body:${result}`);
+                                            commit('addToLog', `read ${interactionConfig.name}: round trip duration: ${responseObj.timeS} s, ${responseObj.timeMs} ms; payload size: ${responseObj.payloadSize}`);
+                                        }
+                                        
+                                    }
+                                )
+                                break;
+                            case PossibleInteractionOpsEnum.PROP_WRITE:
+                                property.writeProperty(interactionConfig.protocol, interactionConfig.input, interactionConfig.uriVariables).then(
+                                    (responseObj) => {
+                                        if(responseObj.interactionSuccessful) {
+                                            commit('addToLog', `Write property ${interactionConfig.name} was succesful.`);
+                                            commit('addToLog', `Write ${interactionConfig.name}: round trip duration: ${responseObj.timeS} s, ${responseObj.timeMs} ms`)
+                                        }
+                                    }
+                                );
+                                break;
+                            case PossibleInteractionOpsEnum.PROP_OBSERVE:
+                                property.observeProperty(interactionConfig.protocol, () => {}, interactionConfig.uriVariables)
+                                break;
+                            case PossibleInteractionOpsEnum.PROP_UNOBSERVE:
+                                property.unobserveProperty(interactionConfig.protocol, interactionConfig.uriVariables)
+                                break;
+                        }
+                        break;
+                    case 'actions':
+                        let action = tdParsed.parsedActions.find((act) => act.interactionName === interactionConfig.name);
+                        if(!action) return;
+                        action.invokeAction(interactionConfig.protocol, interactionConfig.input, interactionConfig.uriVariables).then(
+                            (responseObj) => {
+                                let result = responseObj.resultBody;
+                                if(typeof result === 'object') result = JSON.stringify(result);
+                                commit('addToLog', `Invoke action ${interactionConfig.name} was succesful.`);
+                                if(result) commit('addToLog', `invoke ${interactionConfig.name}: response body:${result}`);
+                                commit('addToLog', `invoke ${interactionConfig.name}: round trip duration: ${responseObj.timeS} s, ${responseObj.timeMs} ms; payload size: ${responseObj.payloadSize}`);
+                            }
+                        )
+                        break;
+                    case 'events':
+                        let event = tdParsed.parsedEvents.find((ev) => ev.interactionName === interactionConfig.name);
+                        if(!event) return;
+                        switch(interactionConfig.op) {
+                            case PossibleInteractionOpsEnum.EVENT_SUB:
+                                event.subscribeEvent(interactionConfig.protocol, () => {} ,interactionConfig.uriVariables);
+                                break;
+                            case PossibleInteractionOpsEnum.EVENT_UNSUB:
+                                event.unsubscribeEvent(interactionConfig.protocol, interactionConfig.uriVariables);
+                                break;
+                        }
+                        break;
+                }
+            }
             commit('setInteractionState', InteractionStateEnum.INVOKED);
             commit('setStatusMessage');
-            const selectedInteractions: {name: string, type: string, op: string, protocol: string}[] = state.selections;
-            const tdParsed: ParsedTd = state.tdParsed;
-            
             // const results = await Api.invokeInteractions(selectedInteractions);
             // commit('setResultProps', results.resultProps);
             // commit('setResultActions', results.resultActions);
@@ -309,6 +396,13 @@ export default {
                 const currentTab = state[payload.tabbarKey][tab];
                 currentTab.tabIsActive = currentTab.tabId === payload.activeTab;
             }
+        },
+        addToLog(state: any, statusString: string) {
+            let logTemp: string = state.logText;
+            state.logText = logTemp.concat('* ', statusString, '\n');;
+        },
+        resetLog(state: any) {
+            state.logText = "";
         }
     },
     getters: {

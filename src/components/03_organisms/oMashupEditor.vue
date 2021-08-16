@@ -44,7 +44,7 @@
             </div>
         </div>
         <div id="text-editor-area" v-if="mashupTabbar[0].tabIsActive" :class="'text-editor-area-full'">
-           <aEditorMonaco v-model="editorText" :language="editorLanguage"/>
+           <aEditorMonaco v-model="editorText" :language="editorLanguage" id="mashup-editor"/>
         </div>
     </div>
 </template>
@@ -57,8 +57,6 @@ import aIconButton from '@/components/01_atoms/aIconButton.vue';
 import aEditorMonaco from '@/components/01_atoms/aEditorMonaco.vue';
 import mMashupElement from '@/components/02_molecules/mMashupElement.vue';
 import { ElementTypeEnum } from '../../util/enums';
-import mashup from '@/store/modules/mashup';
-import { editor } from 'monaco-editor';
 
 export default Vue.extend({
     name: 'oMashupEditor',

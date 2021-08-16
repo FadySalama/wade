@@ -25,6 +25,8 @@ export default Vue.extend({
     padding: 7px;
     font-size: 14px;
     color: rgb(184, 179, 179);
+    box-shadow: 0 4pt 2.5pt 0 gray;
+    z-index: 9999;
 }
 
 .statusbar-container label {

@@ -1,8 +1,9 @@
 <template>
     <div class="results-container">
-        <div class="results-title"><label>Results</label></div>
+        <div class="label">
+            <h2>Results</h2>
+        </div>
         <div v-if="showResultsArea" class="results-area">
-
             <div class="properties border-bottom-bold selection-area-el">
                 <div class="selection-label-container border-bottom"><label>Result Properties</label></div>
                 <div class="interaction-container-all">
@@ -53,12 +54,15 @@
         <div v-else class="result-messages">
            <p>{{ getResultText }}</p>
         </div>
+        <h3>Results log</h3>
+        <textarea name="interactionsLog" id="interactionsLog-text-area" rows="25" readonly v-model="logText">
+        </textarea>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import { TdStateEnum, InteractionStateEnum } from '@/util/enums';
 import aResultElement from '@/components/01_atoms/aResultElement.vue';
 
@@ -68,37 +72,51 @@ export default Vue.extend({
         aResultElement
     },
     beforeDestroy() {
-        this.resetResults();
+        (this as any).resetResults();
     },
     computed: {
         ...mapGetters('TdStore', ['getResultsBtn', 'getResultProps',
          'getResultActions', 'getResultEvents', 'getResultText', 'getInteractionState']),
+         ...mapState('TdStore', ['logText']),
          showResultsArea() {
             return (this as any).getInteractionState === InteractionStateEnum.INVOKED;
         }
     },
     methods: {
-        ...mapActions('TdStore', ['resetResults'])
+        ...mapActions('TdStore', ['resetResults']),
+        scrollDownTextarea() {
+            let textarea = document.getElementById("interactionsLog-text-area");
+            if(textarea) textarea.scrollTop = textarea.scrollHeight;
+        }
     },
     watch: {
-    '$route.params.id'(id) {
-        this.resetResults();
-    }
+        '$route.params.id'(id) {
+            (this as any).resetResults();
+        },
+        'logText' (oldText) {
+            let textarea = document.getElementById("interactionsLog-text-area");
+            if(textarea) textarea.scrollTop = textarea.scrollHeight;
+        }
     },
 });
 </script>
 
 <style scoped>
-.results-container {
-    height: 100%;
-    font-size: 14px;
+#interactionsLog-text-area {
+    width: 100%;
+    resize: none;
 }
 
-.results-title {
-    padding: 7px 0px 7px 2px;
-    height: 8%;
-    display: flex;
-    align-items: center;
+div.label {
+    height: fit-content;
+    padding: 1%;
+    background-color: rgb(99, 99, 99);
+    box-shadow: 0pt 3pt 3pt -1pt gray;
+    margin-bottom: 1%;
+}
+
+.results-container {
+    height: 100%;
 }
 
 .results-area {

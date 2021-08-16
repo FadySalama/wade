@@ -47,19 +47,13 @@
           </div>
         </div>
         <div class="td-testing-area">
-          <div class="interaction-selection-area">
+          <div class="interaction-selection-area panel">
             <mInteractionSelectorEditor/>
           </div>
-          <div>
-            <!-- <aOptionElement 
-              v-for="(element, index) in selectedInteractionNames"
-              :key="element + index"
-              :firstElement="element"
-              class="darkgreen"
-            /> -->
+          <div class="selected-interactions-area panel">
             <mInteractionSelectionEditor/>
           </div>
-          <div class="td-main-right">
+          <div class="interaction-results-area panel">
             <oResults />
           </div>
         </div>
@@ -199,7 +193,8 @@ export default Vue.extend({
 
 .td-main {
   height: 93%;
-  overflow: scroll;
+  width: 100%;
+  overflow: auto;
 }
 
 .td-main::-webkit-scrollbar {
@@ -217,20 +212,39 @@ export default Vue.extend({
 }
 
 .td-editor-area {
-  height: 100%;
-  width: 99%;
+  height: 99.4%;
+  width: 100%;
 }
 
 .td-testing-area {
   height: 100%;
   width: 100%;
   display: flex;
+  border-top: 1pt solid darkgray;
+  border-left: 0pt;
+}
+
+.td-testing-area div.panel {
+  border-right: 0pt solid black;
+}
+
+.td-testing-area div.panel:last-child {
+  border-right: 0;
 }
 
 .interaction-selection-area {
-  width: 40%;
-  margin: 1pt;
+  width: 30%;
 }
+
+.selected-interactions-area {
+  width: 30%;
+}
+
+.interaction-results-area {
+  height: 100%;
+  width: 40%;
+}
+
 
 .td-performance {
   height: 93%;

@@ -94,9 +94,9 @@ export default {
         },
         // ===== DYNAMIC STORE STATE ===== //
         sidebarElements: [],
-        folders: [],
-        mashups: [],
-        tds: [],
+        folders: [] as WADE.FolderElementInterface[],
+        mashups: [] as WADE.MashupElementInterface[],
+        tds: [] as WADE.TDElementInterface[],
         activeElementId: null,
         isSidebarActive: true
     },

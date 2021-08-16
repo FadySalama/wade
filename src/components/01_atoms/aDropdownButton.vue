@@ -38,6 +38,8 @@
         <label v-else>{{ dropdownElement.title }}</label>
       </div>
     </div>
+
+    <div v-if="showDropdown" class="outside" @click.self.stop="away()"></div>
   </div>
 </template>
 
@@ -124,6 +126,10 @@ export default Vue.extend({
     iconDropdownSrc(btnSrc: string): any {
       return require(`@/assets/${btnSrc}.png`);
     },
+    away() {
+      console.log("Clicked")
+      this.showDropdown = false;
+    },
     dropDownClicked(dropdownElement: WADE.DropdownOptionInterface) {
       this.$emit('dropdown-clicked', {
         btnKey: this.btnKey,
@@ -149,6 +155,7 @@ export default Vue.extend({
 
 <style scoped>
 .dropdown-btn-container {
+  position: relative;
   display: flex;
   border: 1px solid #b5dfdd;
   border-radius: 3px;
@@ -180,9 +187,9 @@ export default Vue.extend({
   position: absolute;
   background: #fff;
   font-size: 14px;
-  left: -400%;
+  right: 0;
   width: 500%;
-  margin-top: 80%;
+  top: 105%; 
   z-index: 100;
 }
 
@@ -203,14 +210,11 @@ export default Vue.extend({
 .dropdown-container-sidebar-element {
   left: -1180%;
   width: 1300%;
-  margin-top: 200%;
 }
 
 .dropdown-container-mashup-tds {
   left: 0;
   width: 100%;
-  margin-top: 100%;
-  margin-top: 5%;
 }
 
 .dropdown-element {
@@ -250,7 +254,6 @@ export default Vue.extend({
 .dropdown-container-mashup {
     left: 0;
     width: 100%;
-    margin-top: 6%;
 }
 
 /* btn style for sidebar dropdown options */
@@ -287,4 +290,15 @@ export default Vue.extend({
 .dropdown-custom-editor div:hover {
   background-color: #8aaba9;
 }
+
+.outside {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 2
+}
+
+
 </style>

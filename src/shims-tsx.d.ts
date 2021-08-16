@@ -1,5 +1,5 @@
 import Vue, { VNode } from 'vue';
-import { VtStatus } from './util/enums';
+import { PossibleInteractionOpsEnum, ProtocolEnum, VtStatus } from './util/enums';
 
 
 declare global {
@@ -156,9 +156,24 @@ declare global {
       modelUri: string
       schema: "td-schema" | object
     }
+
+    interface VueInteractionConfig {
+      name: string,
+      type: "properties" | "actions" | "events",
+      protocol: ProtocolEnum,
+      op: PossibleInteractionOpsEnum,
+      uriVariables?: {[key: string]: any},
+      input?: any,
+      repetitionType?: "iterations" | "duration",
+      delayType?: "once" | "beforeEach",
+      delay?: number //in ms
+    }
     interface TdDataSchemaInterface {
       type: DataSchemaTypes;
       enum?: any[];
+      const?: any;
+      oneof?: TdDataSchemaInterface[];
+      format?: string
       readOnly: boolean;
       writeOnly: boolean;
       [key: string]: any;
@@ -177,13 +192,20 @@ declare global {
     interface TdNumberSchemaInterface extends TdDataSchemaInterface {
       type: DataSchemaTypes.NUM;
       minimum?: number;
+      exclusiveMinimum?: number;
       maximum?: number;
+      exclusiveMaximum?: number;
+      multipleOf?: number;
     }
 
     interface TdIntegerSchemaInterface extends TdDataSchemaInterface {
       type: DataSchemaTypes.INT;
       minimum?: number;
+      exclusiveMinimum?: number;
       maximum?: number;
+      exclusiveMaximum?: number;
+      multipleOf?: number;
+
     }
 
     interface TdObjectSchemaInterface extends TdDataSchemaInterface {
@@ -194,6 +216,9 @@ declare global {
 
     interface TdStringSchemaInterface extends TdDataSchemaInterface {
       type: DataSchemaTypes.STRING;
+      minLength?: number;
+      maxLength?: number;
+      pattern?: string
     }
 
     interface TdNullSchemaInterface extends TdDataSchemaInterface {

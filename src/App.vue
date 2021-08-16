@@ -22,8 +22,6 @@ import { mapGetters, mapActions, mapMutations } from 'vuex';
 import tSidebar from '@/components/04_templates/tSidebar.vue';
 import oModal from '@/components/03_organisms/oModal.vue';
 import { ElementTypeEnum } from '@/util/enums';
-import { remote } from 'electron';
-
 
 export default Vue.extend({
   name: 'App',

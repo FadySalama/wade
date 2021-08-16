@@ -72,5 +72,9 @@ export default Vue.extend({
         border: 0;
     }
 
+    .flip-list-move {
+        transition: transform 1s;
+    }
+
 
 </style>

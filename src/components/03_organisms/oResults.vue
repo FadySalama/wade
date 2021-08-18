@@ -109,7 +109,6 @@ export default Vue.extend({
 
 div.label {
     height: fit-content;
-    padding: 1%;
     background-color: rgb(99, 99, 99);
     box-shadow: 0pt 3pt 3pt -1pt gray;
     margin-bottom: 1%;

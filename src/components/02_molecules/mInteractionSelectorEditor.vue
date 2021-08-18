@@ -5,7 +5,7 @@
         </div>
         <div class="body">
             <div class="interaction-selection">
-                <select name="interaction-type" id="interaction-type-select" v-model="selectedInteraction.type" @input="resetInteractionSelection()">
+                <select name="interaction-type" id="interaction-type-select" v-model="selectedInteraction.type">
                     <option v-for="(type, index) in interactionTypeOptions" :key="index" :value="type" > {{type.charAt(0).toUpperCase() + type.slice(1)}} </option>
                 </select>
                 <aFilteredDropdown id="test" v-model="selectedInteraction.name" :options="currentInteractionsList" @input="setOpAndProt()"/>
@@ -16,19 +16,19 @@
                     <option v-for="(protocol, index) in currentProtocols" :key="protocol" :value="protocol" :selected="isFullySelected && index === 0"> {{protocol}} </option>
                 </select>
             </div>
-            <div class="uri-variables-area" v-if="Object.values(selectedInteraction.uriVariables).length > 0">
+            <div class="uri-variables-area" v-if="Object.values(selectedInteraction.uriVariables.schemas).length > 0">
                 <h3>Uri-Variables</h3>
-                <div v-for="(uriVariable, name) in uriVariablesSchemas" :key="name" class="uri-variables-element">
+                <div v-for="(uriVariable, name) in selectedInteraction.uriVariables.schemas" :key="name" class="uri-variables-element">
                     <div>
                         {{ name }}: {{ uriVariable.title }}
                     </div>
-                    <aInputSchemaElement :inputName="name" :inputSchema="uriVariable" v-model="selectedInteraction.uriVariables[name]"/>
+                    <aInputSchemaElement :inputName="name" :inputSchema="uriVariable" v-model="selectedInteraction.uriVariables.value[name]"/>
                 </div>
             </div>
             <div class="interaction-input-area" v-if="this.interactionInputSchema">
                 <h3>Inputs</h3>
                 <div class="interaction-input">
-                    <aInputSchemaElement :inputName="selectedInteraction.name + '-input'" :inputSchema="interactionInputSchema" v-model="selectedInteraction.input"/>
+                    <aInputSchemaElement :inputName="selectedInteraction.name + '-input'" :inputSchema="interactionInputSchema" v-model="selectedInteraction.input.value"/>
                 </div>  
             </div>
             <div>
@@ -58,11 +58,16 @@ export default Vue.extend({
                 type: "",
                 protocol: "",
                 op: "",
-                uriVariables: {},
-                input: null
+                uriVariables: {
+                    schemas: {} as any,
+                    value: {} as any
+                },
+                input: {
+                    schema: {} as WADE.TdDataSchemaInterface | {} | null,
+                    value: null as any | null
+                }
             },
             selectedInteractionsList: [] as any[],
-            uriVariablesSchemas: {},
         }
     },
     computed: {
@@ -191,9 +196,18 @@ export default Vue.extend({
         interactionInputSchema() {
             if(this.isFullySelected) {
                 if(this.selectedInteraction.type === "properties" && this.selectedInteraction.op === "writeproperty") {
-                    return ((this as any).selectedInteractionObject as parsedProperty).dataSchema;
+                    let schema =  ((this as any).selectedInteractionObject as parsedProperty).dataSchema;
+                    this.selectedInteraction.input.schema = schema;
+                    return schema;
                 } else if (this.selectedInteraction.type === "actions" && this.selectedInteraction.op === "invokeaction") {
-                    return ((this as any).selectedInteractionObject as parsedAction).input;
+                    let schema: WADE.TdDataSchemaInterface | undefined | null = ((this as any).selectedInteractionObject as parsedAction).input;
+                    schema = schema ? schema : null;
+                    this.selectedInteraction.input.schema = schema ;
+                    return schema;
+                } else {
+                    this.selectedInteraction.input.schema = null;
+                    this.selectedInteraction.input.value = null;
+                    return null; 
                 }
             }
             return undefined;
@@ -237,9 +251,9 @@ export default Vue.extend({
             }
         },
         addToSelection() {
-            let interactionObj = {...this.selectedInteraction};
+            let interactionObj = JSON.parse(JSON.stringify(this.selectedInteraction));
             (this as any).addToSelectedInteractions({interaction: interactionObj});
-        }
+        },
     },
     watch: {
         '$route'() {
@@ -247,13 +261,19 @@ export default Vue.extend({
         },
         'selectedInteractionObject' (obj) {
             if(!obj) {
-                this.selectedInteraction.uriVariables = {};
-                this.uriVariablesSchemas = {};
+                this.selectedInteraction.input = {
+                    schema: null,
+                    value: null
+                };
+                this.selectedInteraction.uriVariables = {
+                    schemas: {},
+                    value: {}
+                };
             } 
             if(obj && obj.uriVariables) {
-                this.uriVariablesSchemas = obj.uriVariables;
-                for (let uriVariable in this.uriVariablesSchemas) {
-                    this.$set(this.selectedInteraction.uriVariables, uriVariable, undefined);
+                this.selectedInteraction.uriVariables.schemas = obj.uriVariables;
+                for (let uriVariable in this.selectedInteraction.uriVariables.schemas) {
+                    this.$set(this.selectedInteraction.uriVariables.value, uriVariable, undefined);
                 }
             }
         }

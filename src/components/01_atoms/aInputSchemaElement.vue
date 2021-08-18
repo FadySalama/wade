@@ -1,7 +1,7 @@
 <template>
   <div class="input-field-area">
     <aEditorMonaco class="input-field object" 
-      v-if="inputSchema.type === 'array'" language="json" code="[]" 
+      v-if="inputSchema.type === 'array'" language="json" :code="inputValue ? JSON.stringify(inputValue) : '[]'" 
       :id="inputName+'-editor'" 
       :editorOptions="{minimap: {enabled: false}}" 
       :diagnosticOptionsParamters="diaOptionsParams" 
@@ -9,7 +9,7 @@
     />
 
     <select v-if="inputSchema.type === 'boolean'" 
-      :value="inputValue" 
+      :value="inputValue ? inputValue : null" 
       @input="emitValue($event.target.value)">
       <option value="true">True</option>
       <option value="false">False</option>
@@ -20,7 +20,7 @@
       :min="inputSchema.minimum" 
       :max="inputSchema.maximum" 
       :step="inputSchema.multipleOf ? inputSchema.multipleOf : 0.01" 
-      :value="inputValue" 
+      :value="inputValue ? inputValue : null" 
       @input="emitValue($event.target.value)"
     >
 
@@ -35,7 +35,7 @@
 
     <aEditorMonaco class="input-field object"
       v-if="inputSchema.type === 'object'" 
-      code="{}" language="json"
+      :code="inputValue ? JSON.stringify(inputValue) : '{\n}'" language="json"
       :id="inputName+'-editor'"
       :editorOptions="{minimap: {enabled: false}}" 
       :diagnosticOptionsParamters="diaOptionsParams" 
@@ -44,7 +44,7 @@
 
     <aEditorMonaco class="input-field string" 
       v-if="inputSchema.type === 'string'" 
-      code='""' language="json" 
+      :code="inputValue ? JSON.stringify(inputValue) : placeholder " language="json" 
       :id="inputName+'-editor'" 
       :diagnosticOptionsParamters="diaOptionsParams" 
       :editorOptions="{minimap: {enabled: false}, lineNumbers: 'off'}" 
@@ -68,7 +68,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      placeholder: '',
+      placeholder: '""',
     };
   },
   props: {

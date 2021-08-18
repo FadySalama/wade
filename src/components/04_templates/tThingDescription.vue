@@ -51,10 +51,10 @@
             <mInteractionSelectorEditor/>
           </div>
           <div class="selected-interactions-area panel">
-            <mInteractionSelectionEditor/>
+            <oInteractionSelectionEditor/>
           </div>
           <div class="interaction-results-area panel">
-            <oResults />
+            <oResults/>
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@ import aStatusbar from '@/components/01_atoms/aStatusbar.vue';
 import mTabbar from '@/components/02_molecules/mTabbar.vue';
 import mUrlBar from '@/components/02_molecules/mUrlBar.vue';
 import mInteractionSelectorEditor from '@/components/02_molecules/mInteractionSelectorEditor.vue';
-import mInteractionSelectionEditor from '@/components/02_molecules/mInteractionSelectionEditor.vue';
+import oInteractionSelectionEditor from '@/components/03_organisms/oInteractionSelectionEditor.vue';
 import oConfig from '@/components/03_organisms/oConfig.vue';
 import oEditor from '@/components/03_organisms/oEditor.vue';
 import oVirtual from '@/components/03_organisms/oVirtual.vue';
@@ -92,7 +92,7 @@ export default Vue.extend({
     oSelection,
     oResults,
     mInteractionSelectorEditor,
-    mInteractionSelectionEditor,
+    oInteractionSelectionEditor,
     mTabbar,
     mUrlBar,
     tPerformance

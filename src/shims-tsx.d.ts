@@ -162,8 +162,14 @@ declare global {
       type: "properties" | "actions" | "events",
       protocol: ProtocolEnum,
       op: PossibleInteractionOpsEnum,
-      uriVariables?: {[key: string]: any},
-      input?: any,
+      uriVariables?: {
+        schemas: any
+        value: any
+      },
+      input?: {
+        schema: TdDataSchemaInterface | null,
+        value: any,
+      },
       repetitionType?: "iterations" | "duration",
       delayType?: "once" | "beforeEach",
       delay?: number //in ms

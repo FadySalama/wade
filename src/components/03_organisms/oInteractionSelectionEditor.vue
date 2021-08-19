@@ -7,7 +7,7 @@
     <draggable id="selected-interactions-list" v-model="selectedInteractionsList">
       <div class="selected-interaction" v-for="(interaction,index) in selectedInteractionsList" :key="index">
         <mSelectedInteraction 
-        :selectedInteraction="interaction"
+        :selectedInteractionProp="interaction"
         :index="index"
         />
       </div>      
